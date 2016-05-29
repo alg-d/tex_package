@@ -1,0 +1,45 @@
+﻿%%
+%% パッケージファイル kanpdf
+%%
+
+\ProvidesPackage{kanpdf}[2016/02/26]
+
+%%%%%%%%%% パッケージ %%%%%%%%%%
+
+\usepackage{alg-d}
+\usepackage{paralist}
+\usepackage{color}
+
+% hyperref
+\usepackage[dvipdfmx,setpagesize=false]{hyperref}%setpagesize=false trueだと組版に悪影響が出ることがある
+%                                                %bookmarks=true しおりを出す設定
+\usepackage{pxjahyper} %しおりの文字化け防止
+
+%%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
+
+\author{alg-d\\ \url{http://alg-d.com/math/category/}}
+
+\pagestyle{plain} % ヘッダー無し、フッターにページ番号
+\theoremstyle{definition}
+
+\def\labelenumi{$(\theenumi )$}
+\def\theenumi{\arabic{enumi}}
+\renewcommand{\proofname}{\textbf{証明}}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+\newtheorem*{defi}{定義}
+\newtheorem{thm}{定理}
+\newtheorem{prop}[thm]{命題}
+\newtheorem{lem}[thm]{補題}
+\newtheorem{cor}[thm]{系}
+\newtheorem*{ex}{例}
+
+
+
+%%%%%%%%%% 圏論本用 %%%%%%%%%%
+
+\newif\ifkanbook
+\kanbookfalse
+
+
+

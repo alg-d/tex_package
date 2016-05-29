@@ -1,0 +1,332 @@
+﻿%%
+%% パッケージファイル alg-d
+%% http://alg-d.com/
+%%
+
+\ProvidesPackage{alg-d}[2016/05/22]
+
+%%%%%%%%%% パッケージ %%%%%%%%%%
+
+\usepackage{amsmath,amsthm,amssymb} % AMS
+\usepackage{boites} % breakbox
+\usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用)
+\usepackage{bussproofs} % 証明図
+%\usepackage{extarrows} % xLongrightarrow
+
+% LaTeX の「アレなデフォルト」 傾向と対策 http://qiita.com/zr_tex8r/items/297154ca924749e62471
+\usepackage[uplatex]{otf} % BMP外の文字の出力等に必要
+\usepackage[T1]{fontenc}  % T1エンコーディング
+\usepackage{lmodern}      % Latin Modernフォント
+
+% upLaTeX を使おう http://zrbabbler.sp.land.to/uplatex.html
+\usepackage[prefernoncjk]{pxcjkcat}       % 和文欧文の解釈をコントロール
+\usepackage[utf8]{inputenc}               % 欧文のUTF-8対応
+%\usepackage[greek,russian,english]{babel} % pxcjkcat で使用??
+\usepackage{textcomp} % inputencを読み込むと※がエラーとなるためtextcompが必要
+
+% TikZ
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{matrix,arrows}
+
+% xy-pic \Llongrightarrow用
+\usepackage[all]{xy}
+
+%%%%%%%%%% \widebar %%%%%%%%%%
+
+\let\save@mathaccent\mathaccent
+\newcommand*\if@single[3]{%
+  \setbox0\hbox{${\mathaccent"0362{#1}}^H$}%
+  \setbox2\hbox{${\mathaccent"0362{\kern0pt#1}}^H$}%
+  \ifdim\ht0=\ht2 #3\else #2\fi
+  }
+%The bar will be moved to the right by a half of \macc@kerna, which is computed by amsmath:
+\newcommand*\rel@kern[1]{\kern#1\dimexpr\macc@kerna}
+%If there's a superscript following the bar, then no negative kern may follow the bar;
+%an additional {} makes sure that the superscript is high enough in this case:
+\newcommand*\widebar[1]{\@ifnextchar^{{\wide@bar{#1}{0}}}{\wide@bar{#1}{1}}}
+%Use a separate algorithm for single symbols:
+\newcommand*\wide@bar[2]{\if@single{#1}{\wide@bar@{#1}{#2}{1}}{\wide@bar@{#1}{#2}{2}}}
+\newcommand*\wide@bar@[3]{%
+  \begingroup
+  \def\mathaccent##1##2{%
+%Enable nesting of accents:
+    \let\mathaccent\save@mathaccent
+%If there's more than a single symbol, use the first character instead (see below):
+    \if#32 \let\macc@nucleus\first@char \fi
+%Determine the italic correction:
+    \setbox\z@\hbox{$\macc@style{\macc@nucleus}_{}$}%
+    \setbox\tw@\hbox{$\macc@style{\macc@nucleus}{}_{}$}%
+    \dimen@\wd\tw@
+    \advance\dimen@-\wd\z@
+%Now \dimen@ is the italic correction of the symbol.
+    \divide\dimen@ 3
+    \@tempdima\wd\tw@
+    \advance\@tempdima-\scriptspace
+%Now \@tempdima is the width of the symbol.
+    \divide\@tempdima 10
+    \advance\dimen@-\@tempdima
+%Now \dimen@ = (italic correction / 3) - (Breite / 10)
+    \ifdim\dimen@>\z@ \dimen@0pt\fi
+%The bar will be shortened in the case \dimen@<0 !
+    \rel@kern{0.6}\kern-\dimen@
+    \if#31
+      \overline{\rel@kern{-0.6}\kern\dimen@\macc@nucleus\rel@kern{0.4}\kern\dimen@}%
+      \advance\dimen@0.4\dimexpr\macc@kerna
+%Place the combined final kern (-\dimen@) if it is >0 or if a superscript follows:
+      \let\final@kern#2%
+      \ifdim\dimen@<\z@ \let\final@kern1\fi
+      \if\final@kern1 \kern-\dimen@\fi
+    \else
+      \overline{\rel@kern{-0.6}\kern\dimen@#1}%
+    \fi
+  }%
+  \macc@depth\@ne
+  \let\math@bgroup\@empty \let\math@egroup\macc@set@skewchar
+  \mathsurround\z@ \frozen@everymath{\mathgroup\macc@group\relax}%
+  \macc@set@skewchar\relax
+  \let\mathaccentV\macc@nested@a
+%The following initialises \macc@kerna and calls \mathaccent:
+  \if#31
+    \macc@nested@a\relax111{#1}%
+  \else
+%If the argument consists of more than one symbol, and if the first token is
+%a letter, use that letter for the computations:
+    \def\gobble@till@marker##1\endmarker{}%
+    \futurelet\first@char\gobble@till@marker#1\endmarker
+    \ifcat\noexpand\first@char A\else
+      \def\first@char{}%
+    \fi
+    \macc@nested@a\relax111{\first@char}%
+  \fi
+  \endgroup
+}
+
+%%%%%%%%%% 射の合成 %%%%%%%%%%
+
+\def\compo#1{
+	\algd@compo#1\algd@end
+}
+
+\def\algd@compo#1#2{
+	\def\algd@temp{\algd@compo{#2 \circ #1}}
+	\ifx#2\algd@end
+		#1
+	\else
+		\expandafter\algd@temp
+	\fi
+}
+
+\def\algd@end{\algd@end@}
+
+%%%%%%%%%% 記号 %%%%%%%%%%
+
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Qbar}{\widebar{\mathbb{Q}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Cpx}{\mathbb{C}}
+\newcommand{\Zp}{\mathbb{Z}_p}
+\newcommand{\Qp}{\mathbb{Q}_p}
+\newcommand{\Qpbar}{\widebar{\mathbb{Q}}_p}
+\newcommand{\Cp}{\mathbb{C}_p}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Fbar}{\widebar{\mathbb{F}}}
+\newcommand{\Fp}{\mathbb{F}_p}
+\newcommand{\Fq}{\mathbb{F}_q}
+\newcommand{\Ccpt}{\widebar{\mathbb{C}}}
+\newcommand{\p}{\mathfrak{p}}
+\renewcommand{\P}{\mathfrak{P}}
+\newcommand{\notmid}{\mid\hspace{-.67em}/\,}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\Div}{Div}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\cod}{cod}
+\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\Image}{Im}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\coim}{coim}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Nr}{N}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Card}{Card}
+\newcommand{\pow}{\mathcal{P}}
+\newcommand{\powfin}{\mathcal{P}_{\mathrm{fin}}}
+\newcommand{\pair}[1]{\langle #1\rangle}
+\newcommand{\Imageap}{\text{\textquotedblright}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\alg}[1]{#1^{\mathrm{alg}}}
+\newcommand{\sep}[1]{#1^{\mathrm{sep}}}
+\newcommand{\abel}[1]{#1^{\mathrm{ab}}}
+\newcommand{\Con}{\mathrm{Con}}
+\newcommand{\ZF}{\mathsf{ZF}}
+\newcommand{\ZFC}{\mathsf{ZFC}}
+\newcommand{\ZFA}{\mathsf{ZFA}}
+\newcommand{\ZFAC}{\mathsf{ZFAC}}
+\newcommand{\AC}{\mathrm{AC}}
+\newcommand{\SAC}{\mathrm{SAC}}
+\newcommand{\CH}{\mathrm{CH}}
+\newcommand{\GCH}{\mathrm{GCH}}
+\newcommand{\PA}{\mathsf{PA}}
+\newcommand{\NF}{\mathsf{NF}}
+\newcommand{\ON}{\mathrm{ON}}
+\newcommand{\cf}{\mathrm{cf}}
+\newcommand{\card}[1]{\lvert #1\rvert}
+\newcommand{\dprod}{\displaystyle\prod}
+\newcommand{\dcup}{\displaystyle\bigcup}
+\newcommand{\dcap}{\displaystyle\bigcap}
+\newcommand{\dsum}{\displaystyle\sum}
+\newcommand{\dcoprod}{\displaystyle\coprod}
+\newcommand{\family}{\{X_{\lambda}\}_{\lambda\in\Lambda}}
+\newcommand{\Fprod}{\prod_{\lambda\in\Lambda}X_{\lambda}}
+\newcommand{\Fcup}{\bigcup_{\lambda\in\Lambda}X_{\lambda}}
+\newcommand{\Fdprod}{\dprod_{\lambda\in\Lambda}X_{\lambda}}
+\newcommand{\Fdcup}{\dcup_{\lambda\in\Lambda}X_{\lambda}}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\absdot}{\lvert\,\cdot\,\rvert}
+\newcommand{\bigabs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\normdot}{\lVert\,\cdot\,\rVert}
+\newcommand{\s}{\hspace{-.2em}{}^*\hspace{-.1em}}
+\newcommand{\st}{\mathrm{st}}
+\newcommand{\sleq}{\hspace{.15em}{}^*\hspace{-.4em}\leq}
+\newcommand{\slneq}{\hspace{.15em}{}^*\hspace{-.4em}<}
+\newcommand{\Los}{\L o\'s}
+\newcommand{\sym}{\mathrm{sym}}
+\newcommand{\fix}{\mathrm{fix}}
+\newcommand{\val}{\mathrm{val}}
+\newcommand{\bool}[1]{\llbracket#1\rrbracket}
+\newcommand{\dint}{\displaystyle\int}
+
+%% 圏論
+\newcommand{\Lan}[1]{#1^{\dagger}}
+\newcommand{\Ran}[1]{#1^{\ddagger}}
+\newcommand{\Lift}[1]{#1_{\dagger}}
+\newcommand{\Rift}[1]{#1_{\ddagger}}
+
+\DeclareMathOperator{\Ob}{Ob}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator*{\Sub}{Sub}
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Cospan}{Cospan}
+\DeclareMathOperator{\grocon}{Gr}
+
+\newcommand{\commute}{\circlearrowleft}
+\newcommand{\opp}[1]{#1^{\mathrm{op}}}
+\newcommand{\kan}{^{\dagger}}
+\newcommand{\comma}[2]{\mathchoice%
+    {#1\, {\downarrow}\, #2} % ディスプレイスタイル
+    {#1\, {\downarrow}\, #2} % テキストスタイル
+    {#1{\downarrow}#2} % スクリプトスタイル
+    {#1{\downarrow}#2} % スクリプトスクリプトスタイル
+}
+\newcommand{\cocomma}[2]{\mathchoice%
+    {#1\, {\uparrow}\, #2} % ディスプレイスタイル
+    {#1\, {\uparrow}\, #2} % テキストスタイル
+    {#1{\uparrow}#2} % スクリプトスタイル
+    {#1{\uparrow}#2} % スクリプトスクリプトスタイル
+}
+\newcommand{\Ldev}{\mathbf{L}}
+\newcommand{\Rdev}{\mathbf{R}}
+\newcommand{\Ltotal}{\underline{\mathbf{L}}}
+\newcommand{\Rtotal}{\underline{\mathbf{R}}}
+\newcommand{\Cof}{\mathrm{Cof}}
+\newcommand{\Fib}{\mathrm{Fib}}
+\newcommand{\truearr}{\mathrm{true}}
+\newcommand{\falsearr}{\mathrm{false}}
+\newcommand{\Vunit}{I}
+\newcommand{\eq}{\mathrm{eq}}
+\newcommand{\ev}{\mathrm{ev}}
+
+\newcommand{\profunctor}{\mathrel{{\longrightarrow}\hspace{-1.1em}{\circ}\hspace{0.5em}}}%{\looparrowright}
+\newcommand{\anafunctor}{\xrightarrow{\, \mathrm{a}\, }}
+\newcommand{\dinatural}{\xrightarrow{\cdot\cdot}}
+\newcommand{\extranatural}{\xrightarrow{\ \cdot\cdot\ }}
+\makeatother
+\newcommand{\Llongrightarrow}{\ \xybox{\ar@3{->}(6, 0)}\ }
+\makeatletter
+\newcommand{\cof}[1][]{\underset{#1}{\hookrightarrow}}
+\newcommand{\fib}[1][]{\underset{#1}{\twoheadrightarrow}}
+\newcommand{\weakeq}[1][]{\overset{\sim}{\underset{#1}{\rightarrow}}}
+\newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
+\newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
+\newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
+
+% 圏 %
+
+\newcommand{\cat}[1]{#1}
+\newcommand{\moncat}[1]{#1}
+\newcommand{\topos}[1]{#1}
+\newcommand{\encat}[1]{\mathcal{#1}}
+\newcommand{\bicat}[1]{\mathcal{#1}}
+\newcommand{\infcat}[1]{#1}
+
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Sh}{Sh}
+\DeclareMathOperator{\Ho}{Ho}
+\DeclareMathOperator{\Sp}{Sp}
+\newcommand{\SymSp}{\mathrm{Sp}^{\Sigma}}
+\newcommand{\enHo}[1]{\mathcal{H}o(\encat{#1})}
+
+\def\algd@Cat@clear#1-{}
+\newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
+\newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
+\newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
+\newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
+\newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
+
+\newcommand{\topcat}{\Cat_{\mathrm{top}}}
+\newcommand{\simcat}{\Cat_{\Delta}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Top}{\mathbf{Top}}
+\newcommand{\CptHaus}{\mathbf{CptHaus}}
+\newcommand{\CGWH}{\mathbf{CGWH}}
+\newcommand{\CRing}{\mathbf{CRing}}
+\newcommand{\Ring}{\mathbf{Ring}}
+\newcommand{\Dom}{\mathbf{Dom}}
+\newcommand{\Field}{\mathbf{Field}}
+\newcommand{\CstarAlg}{C^*\mathchar`-\mathbf{Alg}}
+\newcommand{\Vect}[1]{\mathbf{Vect}_{#1}}
+\newcommand{\Ch}{\mathbf{Ch}}
+\newcommand{\monoidalR}{\widebar{\R}_+}
+\newcommand{\Sing}{\mathrm{Sing}}
+
+% TikZ %
+
+\tikzset{dbl/.style={-implies, double equal sign distance}}
+\tikzset{dsh/.style={->, dashed}}
+\tikzset{--/.style={-, densely dotted}}
+\tikzset{dbldsh/.style={double, densely dotted, double equal sign distance, -implies}}
+
+
+%%%%%%%%%% subproof環境 %%%%%%%%%%
+
+\newenvironment{subproof}{\begin{breakbox}\setlength{\parindent}{1\Cwd}%
+\noindent%
+\begin{picture}(12,8)%
+\put(0 ,6){.}%
+\put(4 , 0){.}%
+\put(8,6){.}%
+\end{picture}%
+)}{\end{breakbox}}
+
+%%%%%%%%%% remark環境 %%%%%%%%%%
+
+\newenvironment{remark}{\begin{breakbox}\setlength{\parindent}{1\Cwd}\noindent {\Large ※}}{\end{breakbox}}
+\fboxsep=8pt
+
