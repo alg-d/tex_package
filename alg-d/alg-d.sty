@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2016/08/13]
+\ProvidesPackage{alg-d}[2016/05/22]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -157,14 +157,11 @@
 \renewcommand{\P}{\mathfrak{P}}
 \newcommand{\notmid}{\mid\hspace{-.67em}/\,}
 \DeclareMathOperator{\Gal}{Gal}
-\DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\End}{End}
 \DeclareMathOperator{\Aut}{Aut}
 \DeclareMathOperator{\Ann}{Ann}
 \DeclareMathOperator{\Frac}{Frac}
 \DeclareMathOperator{\Div}{Div}
-\DeclareMathOperator{\dom}{dom}
-\DeclareMathOperator{\cod}{cod}
 \DeclareMathOperator{\ran}{ran}
 \DeclareMathOperator{\Image}{Im}
 \DeclareMathOperator{\coker}{coker}
@@ -180,7 +177,6 @@
 \newcommand{\powfin}{\mathcal{P}_{\mathrm{fin}}}
 \newcommand{\pair}[1]{\langle #1\rangle}
 \newcommand{\Imageap}{\text{\textquotedblright}}
-\newcommand{\id}{\mathrm{id}}
 \newcommand{\alg}[1]{#1^{\mathrm{alg}}}
 \newcommand{\sep}[1]{#1^{\mathrm{sep}}}
 \newcommand{\abel}[1]{#1^{\mathrm{ab}}}
@@ -224,27 +220,58 @@
 \newcommand{\bool}[1]{\llbracket#1\rrbracket}
 \newcommand{\dint}{\displaystyle\int}
 
-%% 圏論
+%%%%%%%%%% 圏論 %%%%%%%%%%
+\def\algd@Cat@clear#1-{}
+
 \newcommand{\Lan}[1]{#1^{\dagger}}
 \newcommand{\Ran}[1]{#1^{\ddagger}}
 \newcommand{\Lift}[1]{#1_{\dagger}}
 \newcommand{\Rift}[1]{#1_{\ddagger}}
+\newcommand{\kan}{^{\dagger}} % obsolute
 
 \newcommand{\ocmp}{\bullet} % 1-morphismの合成
 \newcommand{\hcmp}{\bullet} % 水平合成
 \newcommand{\vcmp}{\circ}   % 垂直合成
 
+% 基本的な記号
 \DeclareMathOperator{\Ob}{Ob}
 \DeclareMathOperator{\Mor}{Mor}
-\DeclareMathOperator*{\colim}{colim}
-\DeclareMathOperator*{\Sub}{Sub}
-\DeclareMathOperator{\Span}{Span}
-\DeclareMathOperator{\Cospan}{Cospan}
-\DeclareMathOperator{\grocon}{Gr}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\cod}{cod}
+\DeclareMathOperator{\Hom}{Hom}
+\newcommand{\id}{\mathrm{id}}
 
-\newcommand{\commute}{\circlearrowleft}
+% 射
+
+\newcommand{\vlongrightarrow}{\xrightarrow{\; \moncat{V}\; }}
+\newcommand{\vin}{\in_{\moncat{V}}}
+\newcommand{\profunctor}{\mathrel{{\longrightarrow}\hspace{-1.1em}{\circ}\hspace{0.5em}}}
+\newcommand{\anafunctor}{\xrightarrow{\, \mathrm{a}\, }}
+\newcommand{\dinatural}{\xrightarrow{\cdot\cdot}}
+\newcommand{\extranatural}{\xrightarrow{\ \cdot\cdot\ }}
+\makeatother
+\newcommand{\Llongrightarrow}{\ \xybox{\ar@3{->}(6, 0)}\ }
+\makeatletter
+\newcommand{\cof}[1][]{\underset{#1}{\hookrightarrow}}
+\newcommand{\fib}[1][]{\underset{#1}{\twoheadrightarrow}}
+\newcommand{\weakeq}[1][]{\overset{\sim}{\underset{#1}{\rightarrow}}}
+\newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
+\newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
+
+\newcommand{\truearr}{\mathrm{true}}
+\newcommand{\falsearr}{\mathrm{false}}
+\newcommand{\eq}{\mathrm{eq}}
+\newcommand{\ev}{\mathrm{ev}}
+
+% 圏
+
+\newcommand{\cat}[1]{#1}
+\newcommand{\moncat}[1]{#1}
+\newcommand{\topos}[1]{#1}
+\newcommand{\encat}[1]{\mathcal{#1}}
+\newcommand{\bicat}[1]{\mathcal{#1}}
+\newcommand{\infcat}[1]{#1}
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
-\newcommand{\kan}{^{\dagger}}
 \newcommand{\comma}[2]{\mathchoice%
     {#1\, {\downarrow}\, #2} % ディスプレイスタイル
     {#1\, {\downarrow}\, #2} % テキストスタイル
@@ -257,59 +284,18 @@
     {#1{\uparrow}#2} % スクリプトスタイル
     {#1{\uparrow}#2} % スクリプトスクリプトスタイル
 }
-\newcommand{\Ldev}{\mathbf{L}}
-\newcommand{\Rdev}{\mathbf{R}}
-\newcommand{\Ltotal}{\underline{\mathbf{L}}}
-\newcommand{\Rtotal}{\underline{\mathbf{R}}}
-\newcommand{\Cof}{\mathrm{Cof}}
-\newcommand{\Fib}{\mathrm{Fib}}
-\newcommand{\truearr}{\mathrm{true}}
-\newcommand{\falsearr}{\mathrm{false}}
-\newcommand{\Vunit}{I}
-\newcommand{\eq}{\mathrm{eq}}
-\newcommand{\ev}{\mathrm{ev}}
-
-\newcommand{\profunctor}{\mathrel{{\longrightarrow}\hspace{-1.1em}{\circ}\hspace{0.5em}}}%{\looparrowright}
-\newcommand{\anafunctor}{\xrightarrow{\, \mathrm{a}\, }}
-\newcommand{\dinatural}{\xrightarrow{\cdot\cdot}}
-\newcommand{\extranatural}{\xrightarrow{\ \cdot\cdot\ }}
-\makeatother
-\newcommand{\Llongrightarrow}{\ \xybox{\ar@3{->}(6, 0)}\ }
-\makeatletter
-\newcommand{\cof}[1][]{\underset{#1}{\hookrightarrow}}
-\newcommand{\fib}[1][]{\underset{#1}{\twoheadrightarrow}}
-\newcommand{\weakeq}[1][]{\overset{\sim}{\underset{#1}{\rightarrow}}}
-\newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
-\newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
-\newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
-\newcommand{\vlongrightarrow}{\xrightarrow{\; \moncat{V}\; }}
-\newcommand{\vin}{\in_{\moncat{V}}}
-
-% 圏 %
-
-\newcommand{\cat}[1]{#1}
-\newcommand{\moncat}[1]{#1}
-\newcommand{\topos}[1]{#1}
-\newcommand{\encat}[1]{\mathcal{#1}}
-\newcommand{\bicat}[1]{\mathcal{#1}}
-\newcommand{\infcat}[1]{#1}
 
 \DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Cospan}{Cospan}
 \DeclareMathOperator{\Sh}{Sh}
 \DeclareMathOperator{\Ho}{Ho}
 \DeclareMathOperator{\Sp}{Sp}
 \newcommand{\SymSp}{\mathrm{Sp}^{\Sigma}}
 \newcommand{\enHo}[1]{\mathcal{H}o(\encat{#1})}
 
-\def\algd@Cat@clear#1-{}
-\newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
-\newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
-\newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
-\newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
-\newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
+% 具体的な圏
 
-\newcommand{\topcat}{\Cat_{\mathrm{top}}}
-\newcommand{\simcat}{\Cat_{\Delta}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\Grp}{\mathbf{Grp}}
 \newcommand{\Ab}{\mathbf{Ab}}
@@ -324,10 +310,38 @@
 \newcommand{\Vect}[1]{\mathbf{Vect}_{#1}}
 \newcommand{\Ch}{\mathbf{Ch}}
 \newcommand{\monoidalR}{\widebar{\R}_+}
-\newcommand{\Sing}{\mathrm{Sing}}
 \newcommand{\simplex}{\Delta}
 
-% TikZ %
+\newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
+\newcommand{\topcat}{\Cat_{\mathrm{top}}}
+\newcommand{\simcat}{\Cat_{\Delta}}
+\newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
+\newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
+\newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
+\newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
+
+% 関手
+
+\newcommand{\Sing}{\mathrm{Sing}}
+\DeclareMathOperator{\grocon}{Gr}
+\newcommand{\Ldev}{\mathbf{L}}
+\newcommand{\Rdev}{\mathbf{R}}
+\newcommand{\Ltotal}{\underline{\mathbf{L}}}
+\newcommand{\Rtotal}{\underline{\mathbf{R}}}
+
+% その他
+
+\DeclareMathOperator*{\colim}{colim}
+\DeclareMathOperator*{\Sub}{Sub}
+\newcommand{\commute}{\circlearrowleft}
+\newcommand{\Cof}{\mathrm{Cof}}
+\newcommand{\Fib}{\mathrm{Fib}}
+\newcommand{\Vunit}{I}
+\newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
+
+
+
+% TikZ
 
 \tikzset{dbl/.style={-implies, double equal sign distance}}
 \tikzset{dsh/.style={->, dashed}}
