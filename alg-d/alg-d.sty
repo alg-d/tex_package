@@ -119,6 +119,20 @@
 
 \def\algd@end{\algd@end@}
 
+
+\def\ocompo#1{
+	\algd@ocompo#1\algd@end
+}
+
+\def\algd@ocompo#1#2{
+	\def\algd@temp{\algd@ocompo{#2 \ocmp #1}}
+	\ifx#2\algd@end
+		#1
+	\else
+		\expandafter\algd@temp
+	\fi
+}
+
 %%%%%%%%%% 記号 %%%%%%%%%%
 
 \renewcommand{\epsilon}{\varepsilon}
