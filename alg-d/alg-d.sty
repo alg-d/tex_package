@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2016/05/22]
+\ProvidesPackage{alg-d}[2017/09/09]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -229,9 +229,12 @@
 \newcommand{\Rift}[1]{#1_{\ddagger}}
 \newcommand{\kan}{^{\dagger}} % obsolute
 
-\newcommand{\ocmp}{\bullet} % 1-morphismの合成
+\newcommand{\ocmp}{\circ} % 1-morphismの合成
 \newcommand{\hcmp}{\bullet} % 水平合成
-\newcommand{\vcmp}{\circ}   % 垂直合成
+\newcommand{\vcmp}{*}   % 垂直合成
+\newcommand{\ocmpf}{\mathbin{\widehat{\circ}}} % 関手圏版
+\newcommand{\hcmpf}{\mathbin{\widehat{\bullet}}}
+\newcommand{\vcmpf}{\mathbin{\widehat{*}}}
 
 % 基本的な記号
 \DeclareMathOperator{\Ob}{Ob}
@@ -270,13 +273,25 @@
 \newcommand{\topos}[1]{#1}
 \newcommand{\encat}[1]{\mathcal{#1}}
 \newcommand{\bicat}[1]{\mathcal{#1}}
+\newcommand{\tricat}[1]{\mathcal{#1}}
 \newcommand{\infcat}[1]{#1}
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
-\newcommand{\comma}[2]{\mathchoice%
-    {#1\, {\downarrow}\, #2} % ディスプレイスタイル
-    {#1\, {\downarrow}\, #2} % テキストスタイル
-    {#1{\downarrow}#2} % スクリプトスタイル
-    {#1{\downarrow}#2} % スクリプトスクリプトスタイル
+\newcommand{\cop}[1]{#1^{\mathrm{co}}}
+\newcommand{\coop}[1]{#1^{\mathrm{coop}}}
+\newcommand{\comma}[3][\relax]{ %
+	\ifx#1\relax %
+		\mathchoice %
+			{#2\, {\downarrow}\, #3} % ディスプレイスタイル
+			{#2\, {\downarrow}\, #3} % テキストスタイル
+			{#2{\downarrow}#3} % スクリプトスタイル
+			{#2{\downarrow}#3} % スクリプトスクリプトスタイル
+	\else %
+		\mathchoice %
+			{#2\, {\downarrow_{#1}}\, #3} % ディスプレイスタイル
+			{#2\, {\downarrow_{#1}}\, #3} % テキストスタイル
+			{#2{\downarrow_{#1}}#3} % スクリプトスタイル
+			{#2{\downarrow_{#1}}#3} % スクリプトスクリプトスタイル
+	\fi %
 }
 \newcommand{\cocomma}[2]{\mathchoice%
     {#1\, {\uparrow}\, #2} % ディスプレイスタイル
@@ -286,6 +301,9 @@
 }
 
 \DeclareMathOperator{\Fun}{Fun}
+\newcommand{\Funps}{\Fun_{\mathrm{ps}}}
+\newcommand{\Funlax}{\Fun_{\mathrm{lax}}}
+\DeclareMathOperator{\Adj}{Adj}
 \DeclareMathOperator{\Span}{Span}
 \DeclareMathOperator{\Cospan}{Cospan}
 \DeclareMathOperator{\Sh}{Sh}
@@ -310,7 +328,10 @@
 \newcommand{\Vect}[1]{\mathbf{Vect}_{#1}}
 \newcommand{\Ch}{\mathbf{Ch}}
 \newcommand{\monoidalR}{\widebar{\R}_+}
-\newcommand{\simplex}{\Delta}
+\newcommand{\Gray}{\mathbf{Gray}}
+
+\DeclareMathAlphabet{\mathbbe}{U}{bbold}{m}{n} %\simplex用
+\newcommand{\simplex}{\mathbbe{\Delta}}
 
 \newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
 \newcommand{\topcat}{\Cat_{\mathrm{top}}}
@@ -336,8 +357,10 @@
 \newcommand{\commute}{\circlearrowleft}
 \newcommand{\Cof}{\mathrm{Cof}}
 \newcommand{\Fib}{\mathrm{Fib}}
+\newcommand{\DFib}{\mathrm{DFib}}
 \newcommand{\Vunit}{I}
 \newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
+\newcommand{\pushpro}{\mathbin{\square}}
 
 
 
