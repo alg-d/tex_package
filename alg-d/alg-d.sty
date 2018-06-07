@@ -1,9 +1,9 @@
 ﻿%%
-%% パッケージファイル alg-d
+%% パッケージファイル alg-d (upLaTeX用)
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2017/09/09]
+\ProvidesPackage{alg-d}[2018/06/07]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -11,21 +11,25 @@
 \usepackage{boites} % breakbox
 \usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用)
 \usepackage{bussproofs} % 証明図
+\usepackage[mathscr]{euscript} %Euler Script font用(∞圏用)
 %\usepackage{extarrows} % xLongrightarrow
 
 % LaTeX の「アレなデフォルト」 傾向と対策 http://qiita.com/zr_tex8r/items/297154ca924749e62471
-\usepackage[uplatex]{otf} % BMP外の文字の出力等に必要
-\usepackage[T1]{fontenc}  % T1エンコーディング
-\usepackage{lmodern}      % Latin Modernフォント
+\usepackage{otf}         % BMP外の文字の出力等に必要
+\usepackage[T1]{fontenc} % T1エンコーディング
+\usepackage{lmodern}     % Latin Modernフォント
 
-% upLaTeX を使おう http://zrbabbler.sp.land.to/uplatex.html
-\usepackage[prefernoncjk]{pxcjkcat}       % 和文欧文の解釈をコントロール
-\usepackage[utf8]{inputenc}               % 欧文のUTF-8対応
-%\usepackage[greek,russian,english]{babel} % pxcjkcat で使用??
-\usepackage{textcomp} % inputencを読み込むと※がエラーとなるためtextcompが必要
+% ［改訂新版］upLaTeXを使おう https://qiita.com/zr_tex8r/items/5c14042078b20edbfb07
+\usepackage[prefernoncjk]{pxcjkcat}  % 和文欧文の解釈をコントロール
+%\usepackage[utf8]{inputenc}         % 欧文のUTF-8入力との併用 → TeX Live 2018からは不要 http://acetaminophen.hatenablog.com/entry/tl2018-01
+\cjkcategory{sym04,sym18,sym19}{cjk} % ■、○、▼、※などを和文扱いにする http://id.fnshr.info/2017/05/27/pxcjkcat/
+%\usepackage{textcomp}
+
+% upLaTeX文書で源ノ明朝を簡単に使う方法 https://qiita.com/zr_tex8r/items/9dfeafecca2d091abd02
+% PXchfon の新しいやつ（v1.2） http://d.hatena.ne.jp/zrbabbler/20180317/1521293708
+\usepackage[sourcehan-otc,unicode]{pxchfon}
 
 % TikZ
-\usepackage[dvipdfmx]{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{matrix,arrows}
 
@@ -165,7 +169,7 @@
 \DeclareMathOperator{\ran}{ran}
 \DeclareMathOperator{\Image}{Im}
 \DeclareMathOperator{\coker}{coker}
-\DeclareMathOperator{\coim}{coim}
+\DeclareMathOperator{\coImage}{Coim}
 \DeclareMathOperator{\ord}{ord}
 \DeclareMathOperator{\Res}{Res}
 \DeclareMathOperator{\sign}{sgn}
@@ -227,7 +231,6 @@
 \newcommand{\Ran}[1]{#1^{\ddagger}}
 \newcommand{\Lift}[1]{#1_{\dagger}}
 \newcommand{\Rift}[1]{#1_{\ddagger}}
-\newcommand{\kan}{^{\dagger}} % obsolute
 
 \newcommand{\ocmp}{\circ} % 1-morphismの合成
 \newcommand{\hcmp}{\bullet} % 水平合成
@@ -246,12 +249,12 @@
 
 % 射
 
-\newcommand{\vlongrightarrow}{\xrightarrow{\; \moncat{V}\; }}
+\newcommand{\vrightarrow}{\xrightarrow{\moncat{V}}}
 \newcommand{\vin}{\in_{\moncat{V}}}
 \newcommand{\profunctor}{\mathrel{{\longrightarrow}\hspace{-1.1em}{\circ}\hspace{0.5em}}}
 \newcommand{\anafunctor}{\xrightarrow{\, \mathrm{a}\, }}
 \newcommand{\dinatural}{\xrightarrow{\cdot\cdot}}
-\newcommand{\extranatural}{\xrightarrow{\ \cdot\cdot\ }}
+\newcommand{\extranatural}{\xrightarrow{\cdot\cdot}}
 \makeatother
 \newcommand{\Llongrightarrow}{\ \xybox{\ar@3{->}(6, 0)}\ }
 \makeatletter
@@ -271,33 +274,48 @@
 \newcommand{\cat}[1]{#1}
 \newcommand{\moncat}[1]{#1}
 \newcommand{\topos}[1]{#1}
+\newcommand{\topostr}[1]{#1_{\mathrm{tr}}}
 \newcommand{\encat}[1]{\mathcal{#1}}
 \newcommand{\bicat}[1]{\mathcal{#1}}
 \newcommand{\tricat}[1]{\mathcal{#1}}
-\newcommand{\infcat}[1]{#1}
+\newcommand{\qcat}[1]{\mathscr{#1}}
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
 \newcommand{\cop}[1]{#1^{\mathrm{co}}}
 \newcommand{\coop}[1]{#1^{\mathrm{coop}}}
+%\newcommand{\comma}[3][\relax]{ %
+%	\ifx#1\relax %
+%		\mathchoice %
+%			{#2\, {\downarrow}\, #3} % ディスプレイスタイル
+%			{#2\, {\downarrow}\, #3} % テキストスタイル
+%			{#2{\downarrow}#3} % スクリプトスタイル
+%			{#2{\downarrow}#3} % スクリプトスクリプトスタイル
+%	\else %
+%		\mathchoice %
+%			{#2\, {\downarrow_{#1}}\, #3} % ディスプレイスタイル
+%			{#2\, {\downarrow_{#1}}\, #3} % テキストスタイル
+%			{#2{\downarrow_{#1}}#3} % スクリプトスタイル
+%			{#2{\downarrow_{#1}}#3} % スクリプトスクリプトスタイル
+%	\fi %
+%}
 \newcommand{\comma}[3][\relax]{ %
 	\ifx#1\relax %
-		\mathchoice %
-			{#2\, {\downarrow}\, #3} % ディスプレイスタイル
-			{#2\, {\downarrow}\, #3} % テキストスタイル
-			{#2{\downarrow}#3} % スクリプトスタイル
-			{#2{\downarrow}#3} % スクリプトスクリプトスタイル
+		#2\mathbin{\downarrow}#3 %
 	\else %
-		\mathchoice %
-			{#2\, {\downarrow_{#1}}\, #3} % ディスプレイスタイル
-			{#2\, {\downarrow_{#1}}\, #3} % テキストスタイル
-			{#2{\downarrow_{#1}}#3} % スクリプトスタイル
-			{#2{\downarrow_{#1}}#3} % スクリプトスクリプトスタイル
+		#2\mathbin{\downarrow}_{#1}#3 %
 	\fi %
 }
-\newcommand{\cocomma}[2]{\mathchoice%
-    {#1\, {\uparrow}\, #2} % ディスプレイスタイル
-    {#1\, {\uparrow}\, #2} % テキストスタイル
-    {#1{\uparrow}#2} % スクリプトスタイル
-    {#1{\uparrow}#2} % スクリプトスクリプトスタイル
+%\newcommand{\cocomma}[2]{\mathchoice%
+%    {#1\, {\uparrow}\, #2} % ディスプレイスタイル
+%    {#1\, {\uparrow}\, #2} % テキストスタイル
+%    {#1{\uparrow}#2} % スクリプトスタイル
+%    {#1{\uparrow}#2} % スクリプトスクリプトスタイル
+%}
+\newcommand{\cocomma}[3][\relax]{ %
+	\ifx#1\relax %
+		#2\mathbin{\uparrow}#3 %
+	\else %
+		#2\mathbin{\uparrow}_{#1}#3 %
+	\fi %
 }
 
 \DeclareMathOperator{\Fun}{Fun}
@@ -314,9 +332,14 @@
 
 % 具体的な圏
 
+\newcommand{\zerocat}{\mathbf{0}}
+\newcommand{\onecat}{\mathbf{1}}
+\newcommand{\twocat}{\mathbf{2}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\Grp}{\mathbf{Grp}}
 \newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\CMonoid}{\mathbf{CMon}}
+\newcommand{\Monoid}{\mathbf{Mon}}
 \newcommand{\Top}{\mathbf{Top}}
 \newcommand{\CptHaus}{\mathbf{CptHaus}}
 \newcommand{\CGWH}{\mathbf{CGWH}}
@@ -331,18 +354,30 @@
 \newcommand{\Gray}{\mathbf{Gray}}
 
 \DeclareMathAlphabet{\mathbbe}{U}{bbold}{m}{n} %\simplex用
-\newcommand{\simplex}{\mathbbe{\Delta}}
+
+\newcommand{\simplex}{\mathchoice%
+    {\scalebox{1.0954}{$\displaystyle\mathbbe{\Delta}$}} % ディスプレイスタイル
+    {\scalebox{1.0954}{$\textstyle\mathbbe{\Delta}$}} % テキストスタイル
+    {\scalebox{1.0954}{$\scriptstyle\mathbbe{\Delta}$}} % スクリプトスタイル
+    {\scalebox{1.0954}{$\scriptscriptstyle\mathbbe{\Delta}$}} % スクリプトスクリプトスタイル
+}
+
+\newcommand{\asimplex}{\simplex_a}
 
 \newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
 \newcommand{\topcat}{\Cat_{\mathrm{top}}}
 \newcommand{\simcat}{\Cat_{\Delta}}
 \newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
+\newcommand{\MonCat}{\mathbf{MonCat}}
+\newcommand{\MonCatlax}{\mathbf{MonCat}_{\mathrm{lax}}}
 \newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
 \newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
 \newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
+\newcommand{\Model}{\mathbf{Model}}
 
 % 関手
 
+\newcommand{\yoneda}{y}
 \newcommand{\Sing}{\mathrm{Sing}}
 \DeclareMathOperator{\grocon}{Gr}
 \newcommand{\Ldev}{\mathbf{L}}
@@ -350,15 +385,24 @@
 \newcommand{\Ltotal}{\underline{\mathbf{L}}}
 \newcommand{\Rtotal}{\underline{\mathbf{R}}}
 
+% モノイダル圏
+
+\newcommand{\Vunit}{I}
+\newcommand{\Vcopower}{\odot}
+\newcommand{\Vpower}{\pitchfork}
+
 % その他
 
 \DeclareMathOperator*{\colim}{colim}
+\newcommand{\wcolim}[2]{\mathrm{colim}^{#1}#2}
+\newcommand{\wlim}[2]{\mathrm{lim}^{#1}#2}
+\newcommand{\bicolim}[2]{\mathrm{bicolim}^{#1}#2}
+\newcommand{\bilim}[2]{\mathrm{bilim}^{#1}#2}
 \DeclareMathOperator*{\Sub}{Sub}
 \newcommand{\commute}{\circlearrowleft}
 \newcommand{\Cof}{\mathrm{Cof}}
 \newcommand{\Fib}{\mathrm{Fib}}
 \newcommand{\DFib}{\mathrm{DFib}}
-\newcommand{\Vunit}{I}
 \newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
 \newcommand{\pushpro}{\mathbin{\square}}
 
@@ -385,6 +429,6 @@
 
 %%%%%%%%%% remark環境 %%%%%%%%%%
 
-\newenvironment{remark}{\begin{breakbox}\setlength{\parindent}{1\Cwd}\noindent {\Large ※}}{\end{breakbox}}
+\newenvironment{remark}{\begin{breakbox}\setlength{\parindent}{1\Cwd}\noindent ※}{\end{breakbox}}
 \fboxsep=8pt
 
