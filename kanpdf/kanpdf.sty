@@ -11,9 +11,12 @@
 \usepackage{color}
 
 % hyperref
-\usepackage[dvipdfmx,setpagesize=false]{hyperref}%setpagesize=false trueだと組版に悪影響が出ることがある
-%                                                %bookmarks=true しおりを出す設定
-\usepackage{pxjahyper} %しおりの文字化け防止
+%setpagesize=false (trueだと組版に悪影響が出ることがある)
+%bookmarks=true (デフォルト)しおりを出す設定
+%bookmarksnumbered しおりにセクション番号を付ける
+%pdfusetitle タイトル・作成者を自動設定する
+\usepackage[setpagesize=false,bookmarksnumbered,pdfusetitle]{hyperref}
+\usepackage[bigcode]{pxjahyper} %しおりの文字化け防止
 
 %%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
 
