@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2018/06/07]
+\ProvidesPackage{alg-d}[2018/06/08]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -12,7 +12,6 @@
 \usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用)
 \usepackage{bussproofs} % 証明図
 \usepackage[mathscr]{euscript} %Euler Script font用(∞圏用)
-%\usepackage{extarrows} % xLongrightarrow
 
 % LaTeX の「アレなデフォルト」 傾向と対策 http://qiita.com/zr_tex8r/items/297154ca924749e62471
 \usepackage{otf}         % BMP外の文字の出力等に必要
@@ -23,7 +22,6 @@
 \usepackage[prefernoncjk]{pxcjkcat}  % 和文欧文の解釈をコントロール
 %\usepackage[utf8]{inputenc}         % 欧文のUTF-8入力との併用 → TeX Live 2018からは不要 http://acetaminophen.hatenablog.com/entry/tl2018-01
 \cjkcategory{sym04,sym18,sym19}{cjk} % ■、○、▼、※などを和文扱いにする http://id.fnshr.info/2017/05/27/pxcjkcat/
-%\usepackage{textcomp}
 
 % upLaTeX文書で源ノ明朝を簡単に使う方法 https://qiita.com/zr_tex8r/items/9dfeafecca2d091abd02
 % PXchfon の新しいやつ（v1.2） http://d.hatena.ne.jp/zrbabbler/20180317/1521293708
@@ -264,6 +262,8 @@
 \newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
 \newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
 
+
+
 \newcommand{\truearr}{\mathrm{true}}
 \newcommand{\falsearr}{\mathrm{false}}
 \newcommand{\eq}{\mathrm{eq}}
@@ -282,40 +282,19 @@
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
 \newcommand{\cop}[1]{#1^{\mathrm{co}}}
 \newcommand{\coop}[1]{#1^{\mathrm{coop}}}
-%\newcommand{\comma}[3][\relax]{ %
-%	\ifx#1\relax %
-%		\mathchoice %
-%			{#2\, {\downarrow}\, #3} % ディスプレイスタイル
-%			{#2\, {\downarrow}\, #3} % テキストスタイル
-%			{#2{\downarrow}#3} % スクリプトスタイル
-%			{#2{\downarrow}#3} % スクリプトスクリプトスタイル
-%	\else %
-%		\mathchoice %
-%			{#2\, {\downarrow_{#1}}\, #3} % ディスプレイスタイル
-%			{#2\, {\downarrow_{#1}}\, #3} % テキストスタイル
-%			{#2{\downarrow_{#1}}#3} % スクリプトスタイル
-%			{#2{\downarrow_{#1}}#3} % スクリプトスクリプトスタイル
-%	\fi %
-%}
-\newcommand{\comma}[3][\relax]{ %
-	\ifx#1\relax %
-		#2\mathbin{\downarrow}#3 %
-	\else %
-		#2\mathbin{\downarrow}_{#1}#3 %
-	\fi %
+\newcommand{\comma}[3][\relax]{
+	\ifx#1\relax
+		#2\mathbin{\downarrow}#3
+	\else
+		#2\mathbin{\downarrow}_{#1}#3
+	\fi
 }
-%\newcommand{\cocomma}[2]{\mathchoice%
-%    {#1\, {\uparrow}\, #2} % ディスプレイスタイル
-%    {#1\, {\uparrow}\, #2} % テキストスタイル
-%    {#1{\uparrow}#2} % スクリプトスタイル
-%    {#1{\uparrow}#2} % スクリプトスクリプトスタイル
-%}
-\newcommand{\cocomma}[3][\relax]{ %
-	\ifx#1\relax %
-		#2\mathbin{\uparrow}#3 %
-	\else %
-		#2\mathbin{\uparrow}_{#1}#3 %
-	\fi %
+\newcommand{\cocomma}[3][\relax]{
+	\ifx#1\relax
+		#2\mathbin{\uparrow}#3
+	\else
+		#2\mathbin{\uparrow}_{#1}#3
+	\fi
 }
 
 \DeclareMathOperator{\Fun}{Fun}
