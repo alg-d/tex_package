@@ -262,7 +262,32 @@
 \newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
 \newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
 
-
+\newcount\algd@Cat@index
+\newcount\algd@Cat@limitNum
+\newcommand{\extendrightarrow}[1]{
+  \algd@Cat@index=0 \algd@Cat@limitNum=#1\relax
+  \loop
+    \advance\algd@Cat@index1
+    \relbar\joinrel
+  \ifnum\algd@Cat@index<\algd@Cat@limitNum \repeat
+  \rightarrow
+}
+\newcommand{\Extendrightarrow}[1]{
+  \algd@Cat@index=0 \algd@Cat@limitNum=#1\relax
+  \loop
+    \advance\algd@Cat@index1
+    \Relbar\joinrel
+  \ifnum\algd@Cat@index<\algd@Cat@limitNum \repeat
+  \Rightarrow
+}
+\newcommand{\Eextendrightarrow}[1]{
+  \algd@Cat@index=0 \algd@Cat@limitNum=#1\relax
+  \loop
+    \advance\algd@Cat@index1
+    \equiv\joinrel
+  \ifnum\algd@Cat@index<\algd@Cat@limitNum \repeat
+  \Rrightarrow
+}
 
 \newcommand{\truearr}{\mathrm{true}}
 \newcommand{\falsearr}{\mathrm{false}}
