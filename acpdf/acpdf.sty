@@ -2,17 +2,17 @@
 %% パッケージファイル acpdf
 %%
 
-\ProvidesPackage{acpdf}[2016/02/21]
+\ProvidesPackage{acpdf}[2019/09/17]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
 \usepackage{alg-d}
 \usepackage{paralist}
-\usepackage[dvipdfmx,setpagesize=false,bookmarks=false]{hyperref} % bookmarks=false しおり無し
+\usepackage[setpagesize=false,bookmarks=false,pdfusetitle]{hyperref} % bookmarks=false しおり無し
 
 %%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
 
-\author{alg-d\\ \url{http://alg-d.com/math/ac/}}
+\author{\texorpdfstring{alg-d\\ \url{http://alg-d.com/math/ac/}}{alg-d}}
 
 \pagestyle{plain} % ヘッダー無し、フッターにページ番号
 \theoremstyle{definition}
