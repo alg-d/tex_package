@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2018/08/28]
+\ProvidesPackage{alg-d}[2019/09/17]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -11,6 +11,7 @@
 \usepackage{boites} % breakbox
 \usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用)
 \usepackage{bussproofs} % 証明図
+\usepackage{mathtools} % xslashedrightarrow用
 
 % LaTeX の「アレなデフォルト」 傾向と対策 http://qiita.com/zr_tex8r/items/297154ca924749e62471
 \usepackage{otf}         % BMP外の文字の出力等に必要
@@ -29,6 +30,8 @@
 % TikZ
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{decorations.markings} %barred用
 
 %Euler Script fontを \mathscr に割り当てる(∞圏用)
 \usepackage[mathscr]{eucal} 
@@ -236,6 +239,10 @@
 \newcommand{\ocmpf}{\mathbin{\widehat{\circ}}} % 関手圏版
 \newcommand{\hcmpf}{\mathbin{\widehat{\bullet}}}
 \newcommand{\vcmpf}{\mathbin{\widehat{*}}}
+\newcommand{\dblcmp}{\odot}
+\newcommand{\ocmpc}{\mathbin{\check{\circ}}}
+\newcommand{\hcmpc}{\mathbin{\check{\bullet}}}
+\newcommand{\vcmpc}{\mathbin{\check{*}}}
 
 % 基本的な記号
 \DeclareMathOperator{\Ob}{Ob}
@@ -287,6 +294,27 @@
   \Rrightarrow
 }
 
+\def\slashedarrowfill@#1#2#3#4#5{%
+	$\m@th\thickmuskip0mu\medmuskip\thickmuskip\thinmuskip\thickmuskip
+	\relax#5#1\mkern-7mu%
+	\cleaders\hbox{$#5\mkern-2mu#2\mkern-2mu$}\hfill
+	\mathclap{#3}\mathclap{#2}%
+	\cleaders\hbox{$#5\mkern-2mu#2\mkern-2mu$}\hfill
+	\mkern-7mu#4$%
+}
+\def\rightslashedarrowfill@{%
+	\slashedarrowfill@\relbar\relbar\mapstochar\rightarrow}
+\newcommand\xslashedrightarrow[2][]{%
+	\ext@arrow 0055{\rightslashedarrowfill@}{#1}{#2}}
+\newcommand{\hmor}{\xslashedrightarrow{}}
+\newcommand{\vmor}{\rightarrow}
+\newcommand{\companion}[1]{#1_*}
+\newcommand{\companioneta}[1]{{}_{#1}\eta}
+\newcommand{\companionep}[1]{{}_{#1}\epsilon}
+\newcommand{\conjoint}[1]{#1^*}
+\newcommand{\conjointeta}[1]{\eta_{#1}}
+\newcommand{\conjointep}[1]{\epsilon_{#1}}
+
 \newcommand{\truearr}{\mathrm{true}}
 \newcommand{\falsearr}{\mathrm{false}}
 \newcommand{\eq}{\mathrm{eq}}
@@ -301,10 +329,12 @@
 \newcommand{\encat}[1]{\mathcal{#1}}
 \newcommand{\bicat}[1]{\mathcal{#1}}
 \newcommand{\tricat}[1]{\mathcal{#1}}
+\newcommand{\dblcat}[1]{\mathbb{#1}}
 \newcommand{\qcat}[1]{\mathscr{#1}}
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
 \newcommand{\cop}[1]{#1^{\mathrm{co}}}
 \newcommand{\coop}[1]{#1^{\mathrm{coop}}}
+\newcommand{\strict}[1]{#1^{\mathrm{st}}}
 \newcommand{\comma}[3][\relax]{
 	\ifx#1\relax
 		#2\mathbin{\downarrow}#3
@@ -324,6 +354,7 @@
 \newcommand{\Funst}{\Fun_{\mathrm{st}}}
 \newcommand{\Funps}{\Fun_{\mathrm{ps}}}
 \newcommand{\Funlax}{\Fun_{\mathrm{lax}}}
+\newcommand{\UNT}{\Fun_{\mathrm{un}}}
 \newcommand{\Funx}[1]{\Fun_{\mathrm{#1}}}
 \DeclareMathOperator{\Adj}{Adj}
 \DeclareMathOperator{\Span}{Span}
@@ -333,12 +364,14 @@
 \DeclareMathOperator{\Sp}{Sp}
 \newcommand{\SymSp}{\mathrm{Sp}^{\Sigma}}
 \newcommand{\enHo}[1]{\mathcal{H}o(\encat{#1})}
+\newcommand{\BKleisli}[1]{\mathcal{K}\ell({#1})}
 
 % 具体的な圏
 
 \newcommand{\zerocat}{\mathbf{0}}
 \newcommand{\onecat}{\mathbf{1}}
 \newcommand{\twocat}{\mathbf{2}}
+\newcommand{\threecat}{\mathbf{3}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\Grp}{\mathbf{Grp}}
 \newcommand{\Ab}{\mathbf{Ab}}
@@ -410,8 +443,11 @@
 \newcommand{\Cof}{\mathrm{Cof}}
 \newcommand{\Fib}{\mathrm{Fib}}
 \newcommand{\DFib}{\mathrm{DFib}}
+\newcommand{\CodCof}{\mathrm{CodCof}}
 \newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
 \newcommand{\pushpro}{\mathbin{\square}}
+\newcommand{\ftimes}{\mathbin{\square}}
+\newcommand{\lpsadj}[1]{\mathrel{{}_{#1}{\dashv}}}
 
 
 
@@ -423,6 +459,9 @@
 \tikzset{dbldsh/.style={double, densely dotted, double equal sign distance, -Implies}}
 \tikzset{rhook/.style={{Hooks[right]}->}}
 \tikzset{cross/.style={preaction={-,draw=white,line width=6pt}}}
+\tikzset{barred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
+\tikzset{hequal/.style={transform canvas={yshift=1pt},preaction={draw,transform canvas={yshift=-1pt}}}}
+\tikzset{vequal/.style={transform canvas={xshift=1pt},preaction={draw,transform canvas={xshift=-1pt}}}}
 
 
 %%%%%%%%%% subproof環境 %%%%%%%%%%
