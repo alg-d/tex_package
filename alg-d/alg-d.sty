@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2019/09/17]
+\ProvidesPackage{alg-d}[2020/02/12]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -309,10 +309,10 @@
 	\ext@arrow 0055{\rightslashedarrowfill@}{#1}{#2}}
 \newcommand{\hmor}{\xslashedrightarrow{}}
 \newcommand{\vmor}{\rightarrow}
-\newcommand{\companion}[1]{#1_*}
+\newcommand{\companion}[1]{#1_{\star}}
 \newcommand{\companioneta}[1]{{}_{#1}\eta}
 \newcommand{\companionep}[1]{{}_{#1}\epsilon}
-\newcommand{\conjoint}[1]{#1^*}
+\newcommand{\conjoint}[1]{#1^{\star}}
 \newcommand{\conjointeta}[1]{\eta_{#1}}
 \newcommand{\conjointep}[1]{\epsilon_{#1}}
 
@@ -350,6 +350,7 @@
 		#2\mathbin{\uparrow}_{#1}#3
 	\fi
 }
+\newcommand{\tabulation}[1]{\langle #1\rangle}
 
 \DeclareMathOperator{\Fun}{Fun}
 \newcommand{\Funst}{\Fun_{\mathrm{st}}}
@@ -379,6 +380,7 @@
 \newcommand{\CMonoid}{\mathbf{CMon}}
 \newcommand{\Monoid}{\mathbf{Mon}}
 \newcommand{\Top}{\mathbf{Top}}
+\newcommand{\Topos}{\mathbf{Topos}}
 \newcommand{\CptHaus}{\mathbf{CptHaus}}
 \newcommand{\CGWH}{\mathbf{CGWH}}
 \newcommand{\CRing}{\mathbf{CRing}}
@@ -439,6 +441,8 @@
 \newcommand{\wlim}[2]{\mathrm{lim}^{#1}#2}
 \newcommand{\bicolim}[2]{\mathrm{colim}_{\mathrm{bi}}^{#1}#2}
 \newcommand{\bilim}[2]{\mathrm{lim}_{\mathrm{bi}}^{#1}#2}
+\newcommand{\wbicolim}[2]{\mathrm{colim}_{\mathrm{w}}^{#1}#2}
+\newcommand{\wbilim}[2]{\mathrm{lim}_{\mathrm{w}}^{#1}#2}
 \DeclareMathOperator*{\Sub}{Sub}
 \newcommand{\commute}{\circlearrowleft}
 \newcommand{\Cof}{\mathrm{Cof}}
@@ -452,7 +456,7 @@
 
 
 
-% TikZ
+%%%%%%%%%% TikZ style %%%%%%%%%%
 
 \tikzset{dbl/.style={-implies, double equal sign distance}}
 \tikzset{dsh/.style={->, densely dashed}}
@@ -460,9 +464,14 @@
 \tikzset{dbldsh/.style={double, densely dotted, double equal sign distance, -Implies}}
 \tikzset{rhook/.style={{Hooks[right]}->}}
 \tikzset{cross/.style={preaction={-,draw=white,line width=6pt}}}
+
+%double category
 \tikzset{barred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
 \tikzset{hequal/.style={transform canvas={yshift=1pt},preaction={draw,transform canvas={yshift=-1pt}}}}
 \tikzset{vequal/.style={transform canvas={xshift=1pt},preaction={draw,transform canvas={xshift=-1pt}}}}
+\tikzset{cell/.style={inner sep=0pt,label={[inner sep=0pt]right:$\scriptstyle #1$}}}
+\tikzset{abovecell/.style={inner sep=2pt,label={[inner sep=0pt]above:$\scriptstyle #1$}}}
+\tikzset{belowcell/.style={inner sep=2pt,label={[inner sep=0pt]below:$\scriptstyle #1$}}}
 
 
 %%%%%%%%%% subproof環境 %%%%%%%%%%
