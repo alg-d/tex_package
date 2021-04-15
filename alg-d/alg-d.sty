@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2020/02/12]
+\ProvidesPackage{alg-d}[2021/04/15]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -37,6 +37,8 @@
 %Euler Script fontを \mathscr に割り当てる(∞圏用)
 \usepackage[mathscr]{eucal} 
 
+%太字(2_category.tex用)
+\usepackage{bm}
 
 %%%%%%%%%% \widebar %%%%%%%%%%
 
@@ -168,6 +170,7 @@
 \DeclareMathOperator{\Ann}{Ann}
 \DeclareMathOperator{\Frac}{Frac}
 \DeclareMathOperator{\Div}{Div}
+\DeclareMathOperator{\Spec}{Spec}
 \DeclareMathOperator{\ran}{ran}
 \DeclareMathOperator{\Image}{Im}
 \DeclareMathOperator{\coker}{coker}
@@ -240,6 +243,7 @@
 \newcommand{\ocmpf}{\mathbin{\widehat{\circ}}} % 関手圏版
 \newcommand{\hcmpf}{\mathbin{\widehat{\bullet}}}
 \newcommand{\vcmpf}{\mathbin{\widehat{*}}}
+\newcommand{\ocmpp}{\otimes} % profunctor版
 \newcommand{\dblcmp}{\odot}
 \newcommand{\ocmpc}{\mathbin{\check{\circ}}}
 \newcommand{\hcmpc}{\mathbin{\check{\bullet}}}
@@ -320,6 +324,8 @@
 \newcommand{\falsearr}{\mathrm{false}}
 \newcommand{\eq}{\mathrm{eq}}
 \newcommand{\ev}{\mathrm{ev}}
+\newcommand{\ciso}{\cong}
+\newcommand{\cequiv}{\simeq}
 
 % 圏
 
@@ -374,6 +380,7 @@
 \newcommand{\onecat}{\mathbf{1}}
 \newcommand{\twocat}{\mathbf{2}}
 \newcommand{\threecat}{\mathbf{3}}
+\newcommand{\Inv}{\mathbf{Inv}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\Grp}{\mathbf{Grp}}
 \newcommand{\Ab}{\mathbf{Ab}}
@@ -408,6 +415,7 @@
 \newcommand{\horn}[2]{\Lambda^{#1, #2}}
 
 \newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
+\newcommand{\CAT}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{CAT}}
 \newcommand{\topcat}{\Cat_{\mathrm{top}}}
 \newcommand{\simcat}{\Cat_{\Delta}}
 \newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
@@ -417,11 +425,14 @@
 \newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
 \newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
 \newcommand{\Model}{\mathbf{Model}}
+\newcommand{\FrBi}{\mathcal{FB}}
+\newcommand{\FrBilax}{\mathcal{FB}_{\mathrm{lax}}}
 
 % 関手
 
 \newcommand{\yoneda}{y}
 \newcommand{\Sing}{\mathrm{Sing}}
+\newcommand{\Diagonal}{\Delta}
 \DeclareMathOperator{\grocon}{Gr}
 \newcommand{\Ldev}{\mathbf{L}}
 \newcommand{\Rdev}{\mathbf{R}}
@@ -453,7 +464,9 @@
 \newcommand{\pushpro}{\mathbin{\square}}
 \newcommand{\ftimes}{\mathbin{\square}}
 \newcommand{\lpsadj}[1]{\mathrel{{}_{#1}{\dashv}}}
-
+\newcommand{\pullback}[2]{#1\downarrow^{\!=}#2}
+\newcommand{\pushout}[2]{#1\uparrow_{\!=}#2}
+\DeclareMathOperator*{\Monad}{Monad}
 
 
 %%%%%%%%%% TikZ style %%%%%%%%%%
