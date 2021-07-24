@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2021/04/15]
+\ProvidesPackage{alg-d}[2021/07/24]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -39,6 +39,10 @@
 
 %太字(2_category.tex用)
 \usepackage{bm}
+
+%黒板太字(数字用)
+\DeclareMathAlphabet{\algdmathbba}{U}{BOONDOX-ds}{m}{n}
+\DeclareMathAlphabet{\algdmathbbb}{U}{bbold}{m}{n} %\simplexでも使う
 
 %%%%%%%%%% \widebar %%%%%%%%%%
 
@@ -346,7 +350,7 @@
 	\ifx#1\relax
 		#2\mathbin{\downarrow}#3
 	\else
-		#2\mathbin{\downarrow}_{#1}#3
+		#2\mathbin{\downarrow}^{#1}#3
 	\fi
 }
 \newcommand{\cocomma}[3][\relax]{
@@ -356,17 +360,31 @@
 		#2\mathbin{\uparrow}_{#1}#3
 	\fi
 }
+\newcommand{\pscomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{ps}}#2}
+\newcommand{\laxcomma}[2]{#1\mathbin{\downarrow}^{\!\ell}#2}
+\newcommand{\oplaxcomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{op}\ell}#2}
+\newcommand{\isocomma}[2]{#1\mathbin{\downarrow}^{\!\cong}#2}
+\newcommand{\bicomma}[2]{#1\mathbin{\downarrow}#2}
+\newcommand{\pscocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{ps}}#2}
+\newcommand{\laxcocomma}[2]{#1\mathbin{\uparrow}_{\!\ell}#2}
+\newcommand{\oplaxcocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{op}\ell}#2}
+\newcommand{\isococomma}[2]{#1\mathbin{\downarrow}_{\!\cong}#2}
+\newcommand{\bicocomma}[2]{#1\mathbin{\uparrow}#2}
+\newcommand{\verticalcat}[1]{\mathcal{V}(#1)}
+\newcommand{\horizontalcat}[1]{\mathcal{H}(#1)}
 \newcommand{\tabulation}[1]{\langle #1\rangle}
 
 \DeclareMathOperator{\Fun}{Fun}
 \newcommand{\Funst}{\Fun_{\mathrm{st}}}
 \newcommand{\Funps}{\Fun_{\mathrm{ps}}}
-\newcommand{\Funlax}{\Fun_{\mathrm{lax}}}
+\newcommand{\Funlax}{\Fun_{\ell}}
 \newcommand{\UNT}{\Fun_{\mathrm{un}}}
 \newcommand{\Funx}[1]{\Fun_{\mathrm{#1}}}
 \DeclareMathOperator{\Adj}{Adj}
 \DeclareMathOperator{\Span}{Span}
 \DeclareMathOperator{\Cospan}{Cospan}
+\DeclareMathOperator{\Comma}{Comma}
+\DeclareMathOperator{\Cocomma}{Cocomma}
 \DeclareMathOperator{\Sh}{Sh}
 \DeclareMathOperator{\Ho}{Ho}
 \DeclareMathOperator{\Sp}{Sp}
@@ -376,11 +394,11 @@
 
 % 具体的な圏
 
-\newcommand{\zerocat}{\mathbf{0}}
-\newcommand{\onecat}{\mathbf{1}}
-\newcommand{\twocat}{\mathbf{2}}
-\newcommand{\threecat}{\mathbf{3}}
-\newcommand{\Inv}{\mathbf{Inv}}
+\newcommand{\zerocat}{\algdmathbba{0}}
+\newcommand{\onecat}{\algdmathbbb{1}}
+\newcommand{\twocat}{\algdmathbba{2}}
+\newcommand{\threecat}{\algdmathbba{3}}
+\newcommand{\Iso}{\mathbf{Iso}}
 \newcommand{\Set}{\mathbf{Set}}
 \newcommand{\Grp}{\mathbf{Grp}}
 \newcommand{\Ab}{\mathbf{Ab}}
@@ -402,13 +420,11 @@
 \newcommand{\Gray}{\mathbf{Gray}}
 \newcommand{\Icon}{\mathbf{Icon}}
 
-\DeclareMathAlphabet{\mathbbe}{U}{bbold}{m}{n} %\simplex用
-
 \newcommand{\simplex}{\mathchoice%
-    {\scalebox{1.0954}{$\displaystyle\mathbbe{\Delta}$}} % ディスプレイスタイル
-    {\scalebox{1.0954}{$\textstyle\mathbbe{\Delta}$}} % テキストスタイル
-    {\scalebox{1.0954}{$\scriptstyle\mathbbe{\Delta}$}} % スクリプトスタイル
-    {\scalebox{1.0954}{$\scriptscriptstyle\mathbbe{\Delta}$}} % スクリプトスクリプトスタイル
+    {\scalebox{1.0954}{$\displaystyle\algdmathbbb{\Delta}$}} % ディスプレイスタイル
+    {\scalebox{1.0954}{$\textstyle\algdmathbbb{\Delta}$}} % テキストスタイル
+    {\scalebox{1.0954}{$\scriptstyle\algdmathbbb{\Delta}$}} % スクリプトスタイル
+    {\scalebox{1.0954}{$\scriptscriptstyle\algdmathbbb{\Delta}$}} % スクリプトスクリプトスタイル
 }
 
 \newcommand{\asimplex}{\simplex_a}
@@ -420,13 +436,13 @@
 \newcommand{\simcat}{\Cat_{\Delta}}
 \newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
 \newcommand{\MonCat}{\mathbf{MonCat}}
-\newcommand{\MonCatlax}{\mathbf{MonCat}_{\mathrm{lax}}}
+\newcommand{\MonCatlax}{\mathbf{MonCat}_{\ell}}
 \newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
 \newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
 \newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
 \newcommand{\Model}{\mathbf{Model}}
 \newcommand{\FrBi}{\mathcal{FB}}
-\newcommand{\FrBilax}{\mathcal{FB}_{\mathrm{lax}}}
+\newcommand{\FrBilax}{\mathcal{FB}_{\ell}}
 
 % 関手
 
@@ -454,6 +470,10 @@
 \newcommand{\bilim}[2]{\mathrm{lim}_{\mathrm{bi}}^{#1}#2}
 \newcommand{\wbicolim}[2]{\mathrm{colim}_{\mathrm{w}}^{#1}#2}
 \newcommand{\wbilim}[2]{\mathrm{lim}_{\mathrm{w}}^{#1}#2}
+\newcommand{\laxcolim}[2]{\mathrm{colim}_{\ell}^{#1}#2}
+\newcommand{\laxlim}[2]{\mathrm{lim}_{\ell}^{#1}#2}
+\newcommand{\pscolim}[2]{\mathrm{colim}_{\mathrm{ps}}^{#1}#2}
+\newcommand{\pslim}[2]{\mathrm{lim}_{\mathrm{ps}}^{#1}#2}
 \DeclareMathOperator*{\Sub}{Sub}
 \newcommand{\commute}{\circlearrowleft}
 \newcommand{\Cof}{\mathrm{Cof}}
@@ -464,8 +484,8 @@
 \newcommand{\pushpro}{\mathbin{\square}}
 \newcommand{\ftimes}{\mathbin{\square}}
 \newcommand{\lpsadj}[1]{\mathrel{{}_{#1}{\dashv}}}
-\newcommand{\pullback}[2]{#1\downarrow^{\!=}#2}
-\newcommand{\pushout}[2]{#1\uparrow_{\!=}#2}
+\newcommand{\pullback}[2]{#1\mathbin{\downarrow}^{\!=}#2}
+\newcommand{\pushout}[2]{#1\mathbin{\uparrow}_{\!=}#2}
 \DeclareMathOperator*{\Monad}{Monad}
 
 
