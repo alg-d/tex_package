@@ -19,17 +19,18 @@
 \theoremstyle{definition}
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}%脚注をダガーに
-\def\labelenumi{$\theenumi .$}
+\def\labelenumi{$(\theenumi )$}
 \def\theenumi{\arabic{enumi}}
 \renewcommand{\proofname}{\textbf{証明}}
 
 \newtheorem*{defi}{定義}
-\newtheorem{thm}{定理}
-\newtheorem{prop}[thm]{命題}
-\newtheorem{lem}[thm]{補題}
-\newtheorem{cor}[thm]{系}
+\newtheorem{thm}[equation]{定理}
+\newtheorem{prop}[equation]{命題}
+\newtheorem{lem}[equation]{補題}
+\newtheorem{cor}[equation]{系}
+\newtheorem{note}[equation]{注意}
+\newtheorem{ex}[equation]{例}
 \newtheorem*{ac}{選択公理}
-\newtheorem*{ex}{例}
 
 %%%%%%%%%% テンプレ(AMC) %%%%%%%%%%
 
@@ -58,6 +59,9 @@ AMC (= the Axiom of Multiple Choice)とは次の命題のこと．%
 
 \newif\ifacbook
 \acbookfalse
+
+\newif\ifprintout
+\printoutfalse
 
 \newcommand{\indexac}[1]{}
 \newcommand{\propx}[1]{#1}
