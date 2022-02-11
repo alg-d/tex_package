@@ -492,12 +492,13 @@
 
 %%%%%%%%%% TikZ style %%%%%%%%%%
 
-\tikzset{dbl/.style={-implies, double equal sign distance}}
-\tikzset{dsh/.style={->, densely dashed}}
-\tikzset{--/.style={-, densely dotted}}
-\tikzset{dbldsh/.style={double, densely dotted, double equal sign distance, -Implies}}
-\tikzset{rhook/.style={{Hooks[right]}->}}
-\tikzset{cross/.style={preaction={-,draw=white,line width=6pt}}}
+\tikzset{dbl/.style={ -implies, double equal sign distance }}
+\tikzset{dsh/.style={ ->, densely dashed }}
+\tikzset{--/.style={ -, densely dotted }}
+\tikzset{dbldsh/.style={ double, densely dotted, double equal sign distance, -Implies }}
+\tikzset{rhook/.style={ {Hooks[right]}-> }}
+\tikzset{cross/.style={ preaction={-,draw=white,line width=6pt} }}
+\tikzset{varrow/.style={ auto=false, node contents={\scalebox{0.75}{\textit{V}}}, sloped }}
 
 %double category
 \tikzset{barred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
