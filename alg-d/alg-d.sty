@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2022/02/11]
+\ProvidesPackage{alg-d}[2022/05/21]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -496,6 +496,8 @@
 \newcommand{\pullback}[2]{#1\mathbin{\downarrow}^{\!=}#2}
 \newcommand{\pushout}[2]{#1\mathbin{\uparrow}_{\!=}#2}
 \DeclareMathOperator*{\Monad}{Monad}
+\newcommand{\psadjoint}{\dashv}
+\newcommand{\descent}[1]{\mathrm{Desc}(#1)}
 
 \newcommand{\nlab}{\emph{n}Lab}
 
