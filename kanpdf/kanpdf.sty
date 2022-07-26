@@ -2,7 +2,7 @@
 %% パッケージファイル kanpdf
 %%
 
-\ProvidesPackage{kanpdf}[2018/09/01]
+\ProvidesPackage{kanpdf}[2022/07/26]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -44,5 +44,10 @@
 \newif\ifkanbook
 \kanbookfalse
 
+\newif\iftwocategory
+\twocategorytrue
 
+\newcommand{\pdftext}[1]{#1}
+\newcommand{\enrichtext}[1]{}
+\newcommand{\kanbooktext}[1]{}
 
