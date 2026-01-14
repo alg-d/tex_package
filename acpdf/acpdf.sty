@@ -2,26 +2,22 @@
 %% パッケージファイル acpdf
 %%
 
-\ProvidesPackage{acpdf}[2019/09/17]
+\ProvidesPackage{acpdf}[2026/01/14]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
 \usepackage{alg-d}
-\usepackage{paralist}
-\usepackage[setpagesize=false,bookmarks=false,pdfusetitle]{hyperref} % bookmarks=false しおり無し
+
+% hyperref
+\usepackage[setpagesize=false,bookmarksnumbered,pdfusetitle]{hyperref}
 \usepackage{pxjahyper} %しおりの文字化け防止
 
 %%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
 
-\author{\texorpdfstring{alg-d\\ \url{http://alg-d.com/math/ac/}}{alg-d}}
+\author{\texorpdfstring{alg-d\\ \url{https://alg-d.com/math/ac/}}{alg-d}}
 
 \pagestyle{plain} % ヘッダー無し、フッターにページ番号
-\theoremstyle{definition}
-
-\renewcommand{\thefootnote}{\fnsymbol{footnote}}%脚注をダガーに
-\def\labelenumi{$(\theenumi )$}
-\def\theenumi{\arabic{enumi}}
-\renewcommand{\proofname}{\textbf{証明}}
+\theoremstyle{titlegothic}
 
 \newtheorem*{defi}{定義}
 \newtheorem{thm}[equation]{定理}
@@ -32,6 +28,18 @@
 \newtheorem{ex}[equation]{例}
 \newtheorem*{ac}{選択公理}
 
+% proof環境再定義
+\renewcommand{\proofname}{\textgt{証明}}
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+    #1\@addpunct{\textbf{.}}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
+
 %%%%%%%%%% テンプレ(AMC) %%%%%%%%%%
 
 \newcommand{\AMC}{選択公理と同値なAMCを示す．%
@@ -41,7 +49,7 @@ AMC (= the Axiom of Multiple Choice)とは次の命題のこと．%
 &&非空集合の族\{X_{\lambda}\}_{\lambda\in\Lambda}に対し，有限集合の族\{F_{\lambda}\}_{\lambda\in\Lambda}で\\%
 &&任意の\lambda\in\Lambda に対し\emptyset\ne F_{\lambda}\subset X_{\lambda} となるものが存在する．%
 \end{eqnarray*}%
-同値性の証明は\href{http://alg-d.com/math/ac/amc.html}{the Axiom of Multiple Choice}を参照．%
+同値性の証明は\href{https://alg-d.com/math/ac/amc.html}{the Axiom of Multiple Choice}を参照．%
 \end{remark}}
 
 %%%%%%%%%% テンプレ(AMC+) %%%%%%%%%%
@@ -52,7 +60,7 @@ AMC (= the Axiom of Multiple Choice)とは次の命題のこと．%
 &&有限集合の族\{F_{\lambda}\}_{\lambda\in\Lambda}が存在して任意の\lambda\in\Lambda に対して\emptyset\ne F_{\lambda}\subsetneq X_{\lambda}となる．%
 \end{eqnarray*}%
 \begin{remark}%
-同値性の証明は\href{http://alg-d.com/math/ac/amc.html}{the Axiom of Multiple Choice}の定理2を参照．%
+同値性の証明は\href{https://alg-d.com/math/ac/amc.html}{the Axiom of Multiple Choice}の定理2を参照．%
 \end{remark}}%　　　AMCplusここまで
 
 %%%%%%%%%% 選択公理本用 %%%%%%%%%%

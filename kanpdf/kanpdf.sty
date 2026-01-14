@@ -2,12 +2,12 @@
 %% パッケージファイル kanpdf
 %%
 
-\ProvidesPackage{kanpdf}[2022/07/26]
+\ProvidesPackage{kanpdf}[2026/01/14]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
 \usepackage{alg-d}
-\usepackage{paralist}
+%\usepackage{paralist}
 \usepackage{color}
 
 % hyperref
@@ -20,15 +20,14 @@
 
 %%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
 
-\author{\texorpdfstring{alg-d\\ \url{http://alg-d.com/math/kan_extension/}}{alg-d}}
+\author{\texorpdfstring{alg-d\\ \url{https://alg-d.com/math/kan_extension/}}{alg-d}}
 
 \pagestyle{plain} % ヘッダー無し、フッターにページ番号
-\theoremstyle{definition}
+%\theoremstyle{definition}
+\theoremstyle{titlegothic}
 
-\def\labelenumi{$(\theenumi )$}
-\def\theenumi{\arabic{enumi}}
-\renewcommand{\proofname}{\textbf{証明}}
-%\renewcommand{\thesubsection}{\arabic{subsection}}
+%\def\labelenumi{$(\theenumi )$}
+%\def\theenumi{\arabic{enumi}}
 
 \newtheorem*{defi}{定義}
 \newtheorem{thm}[equation]{定理}
@@ -37,9 +36,23 @@
 \newtheorem{cor}[equation]{系}
 \newtheorem{ex}[equation]{例}
 
+% proof環境再定義
+\renewcommand{\proofname}{\textgt{証明}}
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep
+    #1\@addpunct{\textbf{.}}]\ignorespaces
+}{%
+  \popQED\endtrivlist\@endpefalse
+}
 
 
 %%%%%%%%%% 圏論本用 %%%%%%%%%%
+
+\newif\ifallbook
+\allbookfalse
 
 \newif\ifkanbook
 \kanbookfalse

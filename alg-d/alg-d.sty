@@ -1,20 +1,20 @@
-﻿%%
+%%
 %% パッケージファイル alg-d (upLaTeX用)
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2022/07/26]
+\ProvidesPackage{alg-d}[2026/01/14]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
 \usepackage{amsmath,amsthm,amssymb} % AMS
 \usepackage{boites} % breakbox
-\usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用)
+\usepackage{stmaryrd} % \llbracket, \rrbracket (\boolで使用), \varowedge (\ocmpspanで使用)
 \usepackage{bussproofs} % 証明図
-\usepackage{mathtools} % xslashedrightarrow用
+\usepackage{mathtools} % xslashedrightarrow用, \coloneq
 
 % LaTeX の「アレなデフォルト」 傾向と対策 http://qiita.com/zr_tex8r/items/297154ca924749e62471
-\usepackage{otf}         % BMP外の文字の出力等に必要
+\usepackage[deluxe]{otf}         % BMP外の文字の出力等に必要
 \usepackage[T1]{fontenc} % T1エンコーディング
 \usepackage{lmodern}     % Latin Modernフォント
 
@@ -25,7 +25,8 @@
 
 % upLaTeX文書で源ノ明朝を簡単に使う方法 https://qiita.com/zr_tex8r/items/9dfeafecca2d091abd02
 % PXchfon の新しいやつ（v1.2） http://d.hatena.ne.jp/zrbabbler/20180317/1521293708
-\usepackage[sourcehan-otc,unicode]{pxchfon}
+%\usepackage[sourcehan-otc,unicode]{pxchfon}
+%\usepackage[haranoaji]{pxchfon}
 
 % TikZ
 \usepackage{tikz}
@@ -33,20 +34,124 @@
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{decorations.markings} %barred用
 \usetikzlibrary{fit}
+\usetikzlibrary{calc}
 
-%Euler Script fontを \mathscr に割り当てる(∞圏用)
-\usepackage[mathscr]{eucal} 
-
-%太字(2_category.tex用)
+% 太字(2_category.tex用)
 \usepackage{bm}
 
-%黒板太字(数字用)
+% lmodern時のフォントサイズの対応 https://tex.stackexchange.com/questions/219353/vertical-placing-of-wide-accents-in-superscript
+\DeclareSymbolFont{largesymbols}{OMX}{cmex}{m}{n}
+
+% 黒板太字(数字用)
 \DeclareMathAlphabet{\algdmathbba}{U}{BOONDOX-ds}{m}{n}
 \DeclareMathAlphabet{\algdmathbbb}{U}{bbold}{m}{n} %\simplexでも使う
 
-%itemizeの記号
-\renewcommand{\labelitemii}{\textborn}
+% Euler Script fontを \algdEuScript に割り当てる(∞圏用)
+%\usepackage[mathscr]{eucal} 
+\DeclareMathAlphabet{\algdEuScript}{U}{eus}{m}{n}
+\SetMathAlphabet{\algdEuScript}{bold}{U}{eus}{b}{n}
 
+% rsfsを \algdrsfs に割り当てる(internal category用)
+\DeclareSymbolFont{rsfs}{U}{rsfs}{m}{n}
+\DeclareSymbolFontAlphabet{\algdrsfs}{rsfs}
+
+% enumitem
+\usepackage{enumitem}
+\setlist[enumerate]{label=(\arabic*)}
+\setlist[itemize,2]{label=\textborn}
+
+% \toposimply用
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontSubstitution{LS1}{stix}{m}{n}
+\DeclareSymbolFont{arrows1}{LS1}{stixsf}{m}{n}
+\DeclareMathSymbol{\algd@rightwhitearrow}{\mathord}{arrows1}{"EF}
+
+% zref-clever
+\usepackage{zref-clever}
+\zcDeclareLanguage[allcaps]{japanese}
+\zcLanguageSetup{japanese}{
+  namesep   = {\nobreak} ,
+  rangesep  = {～} ,
+  type = page ,
+    Name-sg =,
+    Name-pl =,
+    rangesep = \textendash ,
+    rangetopair = false ,
+    refbounds = {,,ページ,},
+  type = book ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,編,},
+  type = part ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,部,},
+  type = chapter ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,章,} ,
+  type = section ,
+    Name-sg = 第 ,
+    Name-pl = 第 ,
+    refbounds = {,,節,} ,
+  type = appendix ,
+    Name-sg = 付録 ,
+    Name-pl = 付録 ,
+  type = equation ,
+    Name-sg =,
+    Name-pl =,
+    refbounds = {,(,),} ,
+  type = item ,
+    Name-sg =,
+    Name-pl =,
+  type = thm ,
+    Name-sg = 定理 ,
+    Name-pl = 定理 ,
+  type = prop ,
+    Name-sg = 命題 ,
+    Name-pl = 命題 ,
+  type = lem ,
+    Name-sg = 補題 ,
+    Name-pl = 補題 ,
+  type = cor ,
+    Name-sg = 系 ,
+    Name-pl = 系 ,
+  type = ex ,
+    Name-sg = 例 ,
+    Name-pl = 例 ,
+}
+\zcsetup{lang=japanese}
+\zcsetup{nameinlink=true}
+\AddToHook{env/thm/begin}{%
+  \zcsetup{ countertype = { equation = thm }}
+}
+\AddToHook{env/prop/begin}{%
+  \zcsetup{ countertype = { equation = prop }}
+}
+\AddToHook{env/lem/begin}{%
+  \zcsetup{ countertype = { equation = lem }}
+}
+\AddToHook{env/cor/begin}{%
+  \zcsetup{ countertype = { equation = cor }}
+}
+\AddToHook{env/ex/begin}{%
+  \zcsetup{ countertype = { equation = ex }}
+}
+\AddToHook{env/note/begin}{%
+  \zcsetup{ countertype = { equation = note }}
+}
+\newcommand{\parenthesesZcref}[1]{\zcref[noname,refbounds={,(,),}]{#1}}
+
+%%%%%%%%%% theoremstyle %%%%%%%%%%
+\newtheoremstyle{titlegothic}% name of the style
+  {}% space above
+  {}% space below
+  {\upshape}% body font (upshape is normal/roman font)
+  {}% indent amount
+  {}% head font (bold)
+  {．}% head punctuation
+  {0pt}% head space
+  {\thmname{\textgt{#1}}\thmnumber{ \textbf{#2}}\thmnote{（#3）}}% head spec (empty for default)
 
 %%%%%%%%%% \widebar %%%%%%%%%%
 
@@ -149,6 +254,23 @@
 	\fi
 }
 
+%%%%%%%%%% 定義用 %%%%%%%%%%
+% #1: 索引表示用文字, #2: 読み, #3: 定義文字
+\newcommand{\wordDefinition}[3][\relax]{%
+	\ifx"#2"%
+		{\bfseries\gtfamily\sffamily #3}%
+	\else
+		\algd@wordDefinition{#1}{#2}{#3}%
+	\fi
+}
+\newcommand{\algd@wordDefinition}[3]{%
+	\ifx\relax#1%
+		\index{#2@#3}{\bfseries\gtfamily\sffamily #3}%
+	\else
+		\index{#2@#1}{\bfseries\gtfamily\sffamily #3}%
+	\fi
+}
+
 %%%%%%%%%% 記号 %%%%%%%%%%
 
 \renewcommand{\epsilon}{\varepsilon}
@@ -198,16 +320,6 @@
 \newcommand{\sep}[1]{#1^{\mathrm{sep}}}
 \newcommand{\abel}[1]{#1^{\mathrm{ab}}}
 \newcommand{\Con}{\mathrm{Con}}
-\newcommand{\ZF}{\mathsf{ZF}}
-\newcommand{\ZFC}{\mathsf{ZFC}}
-\newcommand{\ZFA}{\mathsf{ZFA}}
-\newcommand{\ZFAC}{\mathsf{ZFAC}}
-\newcommand{\AC}{\mathrm{AC}}
-\newcommand{\SAC}{\mathrm{SAC}}
-\newcommand{\CH}{\mathrm{CH}}
-\newcommand{\GCH}{\mathrm{GCH}}
-\newcommand{\PA}{\mathsf{PA}}
-\newcommand{\NF}{\mathsf{NF}}
 \newcommand{\ON}{\mathrm{ON}}
 \newcommand{\cf}{\mathrm{cf}}
 \newcommand{\card}[1]{\lvert #1\rvert}
@@ -216,6 +328,7 @@
 \newcommand{\dcap}{\displaystyle\bigcap}
 \newcommand{\dsum}{\displaystyle\sum}
 \newcommand{\dcoprod}{\displaystyle\coprod}
+\newcommand{\dint}{\displaystyle\int}
 \newcommand{\family}{\{X_{\lambda}\}_{\lambda\in\Lambda}}
 \newcommand{\Fprod}{\prod_{\lambda\in\Lambda}X_{\lambda}}
 \newcommand{\Fcup}{\bigcup_{\lambda\in\Lambda}X_{\lambda}}
@@ -230,12 +343,73 @@
 \newcommand{\st}{\mathrm{st}}
 \newcommand{\sleq}{\hspace{.15em}{}^*\hspace{-.4em}\leq}
 \newcommand{\slneq}{\hspace{.15em}{}^*\hspace{-.4em}<}
+
+\newcommand{\stringConcatenation}{%
+  \mathbin{
+    \mathchoice
+    {\raisebox{1ex}{\scalebox{.7}{$\frown$}}}
+    {\raisebox{1ex}{\scalebox{.7}{$\frown$}}}
+    {\raisebox{.7ex}{\scalebox{.5}{$\frown$}}}
+    {\raisebox{.7ex}{\scalebox{.5}{$\frown$}}}
+  }
+}
+
+%%%%%%%%%% 数学基礎論 %%%%%%%%%%
 \newcommand{\Los}{\L o\'s}
+\newcommand{\bool}[1]{\llbracket#1\rrbracket}
+\newcommand{\contradiction}{\bot}
+\newcommand{\languagex}[1]{#1}
+\newcommand{\structurex}[1]{\mathcal{#1}}
+\newcommand{\class}[1]{\mathbf{#1}}
+\newcommand{\substitute}[3]{#1[#2\rightsquigarrow #3]}
+\newcommand{\notprovable}{\not\vdash}
+\newcommand{\lforall}[1]{\forall #1\,}
+\newcommand{\lexists}[1]{\exists #1\,}
+\newcommand{\lexistsunique}[1]{\exists! #1\,}
+\let\landorg\land
+\renewcommand{\land}{\mathrel{\landorg}}
+\let\lororg\lor
+\renewcommand{\lor}{\mathrel{\lororg}}
+
+% 証明図
+\newcommand{\RightReason}[1]{\RightLabel{\small #1}}
+\newcommand{\KihonAxiom}[1][\relax]{
+	\ifx#1\relax
+		\AxiomC{\small 基本公理}
+		\noLine
+	\else
+		\AxiomC{\small \kernHyps{#1}基本公理}
+		\noLine
+	\fi
+}
+
+% 公理・命題
+\newcommand{\ZF}{\mathsf{ZF}}
+\newcommand{\ZFC}{\mathsf{ZFC}}
+\newcommand{\ZFA}{\mathsf{ZFA}}
+\newcommand{\ZFAC}{\mathsf{ZFAC}}
+\newcommand{\AC}{\mathrm{AC}}
+\newcommand{\ACmultiple}{\mathrm{AMC}}
+\newcommand{\DC}{\mathrm{DC}}
+\newcommand{\DCmultiple}{\mathrm{DMC}}
+\newcommand{\SAC}{\mathrm{SAC}}
+\newcommand{\CH}{\mathrm{CH}}
+\newcommand{\GCH}{\mathrm{GCH}}
+\newcommand{\PA}{\mathsf{PA}}
+\newcommand{\NF}{\mathsf{NF}}
+\newcommand{\BPI}{\mathrm{BPI}}
+
+% 強制法
+\newcommand{\forcing}[1]{\mathbb{#1}}
+\newcommand{\forcingMax}{\mathbf{1}}
 \newcommand{\sym}{\mathrm{sym}}
 \newcommand{\fix}{\mathrm{fix}}
 \newcommand{\val}{\mathrm{val}}
-\newcommand{\bool}[1]{\llbracket#1\rrbracket}
-\newcommand{\dint}{\displaystyle\int}
+\newcommand{\HereditarySymmetric}{\class{HS}}
+\newcommand{\Generic}{\mathcal{G}}
+\newcommand{\FiniteMaps}{\mathrm{Fin}}
+
+
 
 %%%%%%%%%% 圏論 %%%%%%%%%%
 \def\algd@Cat@clear#1-{}
@@ -253,11 +427,16 @@
 \newcommand{\ocmpf}{\mathbin{\widehat{\circ}}} % 関手圏版
 \newcommand{\hcmpf}{\mathbin{\widehat{\bullet}}}
 \newcommand{\vcmpf}{\mathbin{\widehat{*}}}
-\newcommand{\ocmpp}{\otimes} % profunctor版
+\newcommand{\ocmpp}{\diamond} % profunctor版
+\newcommand{\ocmpspan}{\varowedge} % span版
+\newcommand{\hcmpspan}{\varowedge} % span版
+
 \newcommand{\dblcmp}{\odot}
 \newcommand{\ocmpc}{\mathbin{\check{\circ}}}
 \newcommand{\hcmpc}{\mathbin{\check{\bullet}}}
 \newcommand{\vcmpc}{\mathbin{\check{*}}}
+
+\newcommand{\pushpro}{\mathbin{\square}}
 
 % 基本的な記号
 \DeclareMathOperator{\Ob}{Ob}
@@ -265,23 +444,66 @@
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\cod}{cod}
 \DeclareMathOperator{\Hom}{Hom}
-
-% 射
-
 \newcommand{\id}{\mathrm{id}}
-\newcommand{\vrightarrow}{\mathrel{-\hspace{-0.6em}\scalebox{0.75}{\textit{V}}\hspace{-0.9em}\rightarrow}}
-\newcommand{\vin}{\in_{\moncat{V}}}
+\newcommand{\walkingarrow}{\ell}
+\newcommand{\ev}{\mathrm{ev}}
+\newcommand{\ciso}{\cong}
+\newcommand{\cequiv}{\simeq}
+\newcommand{\CommaNat}{\kappa}
+\newcommand{\CocommaNat}{\widebar{\kappa}}
+
+\newcommand{\pscomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{ps}}#2}
+\newcommand{\laxcomma}[2]{#1\mathbin{\downarrow}^{\!\ell}#2}
+\newcommand{\oplaxcomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{op}\ell}#2}
+\newcommand{\isocomma}[2]{#1\mathbin{\downarrow}^{\!\cong}#2}
+\newcommand{\bicomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{bi}}#2}
+\newcommand{\wcomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{w}}#2}
+
+\newcommand{\pscocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{ps}}#2}
+\newcommand{\laxcocomma}[2]{#1\mathbin{\uparrow}_{\!\ell}#2}
+\newcommand{\oplaxcocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{op}\ell}#2}
+\newcommand{\isococomma}[2]{#1\mathbin{\downarrow}_{\!\cong}#2}
+\newcommand{\bicocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{bi}}#2}
+\newcommand{\wcocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{w}}#2}
+
+\newcommand{\pullback}[2]{#1\mathbin{\downarrow}^{\!=}#2}
+\newcommand{\pushout}[2]{#1\mathbin{\uparrow}_{\!=}#2}
+\newcommand{\bipullback}[2]{#1\mathbin{\downarrow}^{\!\cong}#2}
+\newcommand{\bipushout}[2]{#1\mathbin{\uparrow}_{\!\cong}#2}
+\newcommand{\verticalcat}[1]{\mathcal{V}(#1)}
+\newcommand{\horizontalcat}[1]{\mathcal{H}(#1)}
+\newcommand{\tabulation}[1]{\langle #1\rangle}
+
+\DeclareMathOperator{\Fun}{Fun}
+\newcommand{\Funst}{\Fun_{\mathrm{st}}}
+\newcommand{\Funps}{\Fun_{\mathrm{ps}}}
+\newcommand{\Funlax}{\Fun_{\ell}}
+\newcommand{\UNT}{\Fun_{\mathrm{un}}}
+\newcommand{\Funx}[1]{\Fun_{\mathrm{#1}}}
+\DeclareMathOperator{\Adj}{Adj}
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\Cospan}{Cospan}
+\DeclareMathOperator{\biSpan}{Span}
+\DeclareMathOperator{\Comma}{Comma}
+\DeclareMathOperator{\Cocomma}{Cocomma}
+\DeclareMathOperator{\Sh}{Sh}
+\DeclareMathOperator{\Ho}{Ho}
+\DeclareMathOperator{\Sp}{Sp}
+\newcommand{\SymSp}{\mathrm{Sp}^{\Sigma}}
+\newcommand{\enHo}{\mathop{\mathcal{H}o}}
+\newcommand{\BKleisli}[1]{\mathcal{K}\ell({#1})}
+\newcommand{\localization}[2]{#1[#2^{-1}]}
+\newcommand{\cauchy}[1]{\widebar{#1}}
+
+% 矢印
+
+\newcommand{\vrightarrow}{\mathrel{-\hspace{-0.6em}\scalebox{0.7}{\textit{V}}\hspace{-0.9em}\rightarrow}}
 \newcommand{\profunctor}{\mathrel{-\hspace{-0.4em}{\circ}\hspace{-0.8em}\rightarrow}}
 \newcommand{\anafunctor}{\xrightarrow{\mathrm{a}}}
 \newcommand{\anatrans}{\xRightarrow{\mathrm{a}}}
 \newcommand{\dinatural}{\xrightarrow{\cdot\cdot}}
 \newcommand{\extranatural}{\xrightarrow{\cdot\cdot}}
 \newcommand{\Llongrightarrow}{\Eextendrightarrow{1}}
-\newcommand{\cof}[1][]{\underset{#1}{\hookrightarrow}}
-\newcommand{\fib}[1][]{\underset{#1}{\twoheadrightarrow}}
-\newcommand{\weakeq}[1][]{\overset{\sim}{\underset{#1}{\rightarrow}}}
-\newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
-\newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
 
 \newcount\algd@Cat@index
 \newcount\algd@Cat@limitNum
@@ -322,21 +544,69 @@
 	\slashedarrowfill@\relbar\relbar\mapstochar\rightarrow}
 \newcommand\xslashedrightarrow[2][]{%
 	\ext@arrow 0055{\rightslashedarrowfill@}{#1}{#2}}
-\newcommand{\hmor}{\xslashedrightarrow{}}
-\newcommand{\vmor}{\rightarrow}
-\newcommand{\companion}[1]{#1_{\star}}
-\newcommand{\companioneta}[1]{{}_{#1}\eta}
-\newcommand{\companionep}[1]{{}_{#1}\epsilon}
-\newcommand{\conjoint}[1]{#1^{\star}}
-\newcommand{\conjointeta}[1]{\eta_{#1}}
-\newcommand{\conjointep}[1]{\epsilon_{#1}}
 
-\newcommand{\truearr}{\mathrm{true}}
-\newcommand{\falsearr}{\mathrm{false}}
-\newcommand{\eq}{\mathrm{eq}}
-\newcommand{\ev}{\mathrm{ev}}
-\newcommand{\ciso}{\cong}
-\newcommand{\cequiv}{\simeq}
+% 具体的な圏
+
+\newcommand{\zerocat}{\algdmathbba{0}}
+\newcommand{\onecat}{\algdmathbbb{1}}
+\newcommand{\twocat}{\algdmathbba{2}}
+\newcommand{\threecat}{\algdmathbba{3}}
+\newcommand{\Iso}{\mathbf{Iso}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\SET}{\mathbf{SET}}
+\newcommand{\Rel}{\mathbf{Rel}}
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\CMonoid}{\mathbf{CMon}}
+\newcommand{\Monoid}{\mathbf{Mon}}
+\newcommand{\Top}{\mathbf{Top}}
+\newcommand{\Topos}{\mathbf{Topos}}
+\newcommand{\CptHaus}{\mathbf{CptHaus}}
+\newcommand{\CGWH}{\mathbf{CGWH}}
+\newcommand{\CRing}{\mathbf{CRing}}
+\newcommand{\Ring}{\mathbf{Ring}}
+\newcommand{\Dom}{\mathbf{Dom}}
+\newcommand{\Field}{\mathbf{Field}}
+\newcommand{\CstarAlg}{C^*\mathchar`-\mathbf{Alg}}
+\newcommand{\Vect}[1]{\mathbf{Vect}_{#1}}
+\newcommand{\Ch}{\mathbf{Ch}}
+\newcommand{\Graph}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Graph}}
+\newcommand{\GRAPH}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{GRAPH}}
+\newcommand{\monoidalR}{\widebar{\R}_+}
+\newcommand{\Gray}{\mathbf{Gray}}
+\newcommand{\Icon}{\mathbf{Icon}}
+\newcommand{\AdjBicat}{\mathcal{A}dj}
+
+\newcommand{\simplex}{\mathchoice%
+    {\scalebox{1.0954}{$\displaystyle\algdmathbbb{\Delta}$}} % ディスプレイスタイル
+    {\scalebox{1.0954}{$\textstyle\algdmathbbb{\Delta}$}} % テキストスタイル
+    {\scalebox{1.0954}{$\scriptstyle\algdmathbbb{\Delta}$}} % スクリプトスタイル
+    {\scalebox{1.0954}{$\scriptscriptstyle\algdmathbbb{\Delta}$}} % スクリプトスクリプトスタイル
+}
+
+\newcommand{\asimplex}{\simplex_{\mathrm{a}}}
+\newcommand{\horn}[2]{\Lambda^{#1, #2}}
+
+\newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
+\newcommand{\CAT}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{CAT}}
+\newcommand{\topcat}{\Cat_{\mathrm{top}}}
+\newcommand{\simcat}{\Cat_{\Delta}}
+\newcommand{\QCat}{\mathbf{QCat}}
+\newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
+\newcommand{\MonCat}{\mathbf{MonCat}}
+\newcommand{\MonCatlax}{\mathbf{MonCat}_{\ell}}
+\newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
+\newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
+\newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
+\newcommand{\Model}{\mathbf{Model}}
+\newcommand{\FrBi}{\mathcal{FB}}
+\newcommand{\FrBilax}{\mathcal{FB}_{\ell}}
+\newcommand{\dProf}[1][\algd@Cat@clear]{#1\mathchar`-\mathbb{P}\mathrm{rof}}
+\newcommand{\dPROF}[1][\algd@Cat@clear]{#1\mathchar`-\mathbb{P}\mathrm{ROF}}
+\newcommand{\AVDCat}{\mathbf{AVDCat}}
+\newcommand{\VDCat}{\mathbf{VDCat}}
+\newcommand{\PDCat}{\mathbf{PDCat}}
+
 
 % 圏
 
@@ -348,7 +618,8 @@
 \newcommand{\bicat}[1]{\mathcal{#1}}
 \newcommand{\tricat}[1]{\mathcal{#1}}
 \newcommand{\dblcat}[1]{\mathbb{#1}}
-\newcommand{\qcat}[1]{\mathscr{#1}}
+\newcommand{\qcat}[1]{\algdEuScript{#1}}
+\newcommand{\intcat}[1]{\algdrsfs{#1}}
 \newcommand{\opp}[1]{#1^{\mathrm{op}}}
 \newcommand{\cop}[1]{#1^{\mathrm{co}}}
 \newcommand{\coop}[1]{#1^{\mathrm{coop}}}
@@ -367,137 +638,128 @@
 		#2\mathbin{\uparrow}_{#1}#3
 	\fi
 }
-\newcommand{\pscomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{ps}}#2}
-\newcommand{\laxcomma}[2]{#1\mathbin{\downarrow}^{\!\ell}#2}
-\newcommand{\oplaxcomma}[2]{#1\mathbin{\downarrow}^{\!\mathrm{op}\ell}#2}
-\newcommand{\isocomma}[2]{#1\mathbin{\downarrow}^{\!\cong}#2}
-\newcommand{\bicomma}[2]{#1\mathbin{\downarrow}#2}
-\newcommand{\pscocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{ps}}#2}
-\newcommand{\laxcocomma}[2]{#1\mathbin{\uparrow}_{\!\ell}#2}
-\newcommand{\oplaxcocomma}[2]{#1\mathbin{\uparrow}_{\!\mathrm{op}\ell}#2}
-\newcommand{\isococomma}[2]{#1\mathbin{\downarrow}_{\!\cong}#2}
-\newcommand{\bicocomma}[2]{#1\mathbin{\uparrow}#2}
-\newcommand{\verticalcat}[1]{\mathcal{V}(#1)}
-\newcommand{\horizontalcat}[1]{\mathcal{H}(#1)}
-\newcommand{\tabulation}[1]{\langle #1\rangle}
-
-\DeclareMathOperator{\Fun}{Fun}
-\newcommand{\Funst}{\Fun_{\mathrm{st}}}
-\newcommand{\Funps}{\Fun_{\mathrm{ps}}}
-\newcommand{\Funlax}{\Fun_{\ell}}
-\newcommand{\UNT}{\Fun_{\mathrm{un}}}
-\newcommand{\Funx}[1]{\Fun_{\mathrm{#1}}}
-\DeclareMathOperator{\Adj}{Adj}
-\DeclareMathOperator{\Span}{Span}
-\DeclareMathOperator{\Cospan}{Cospan}
-\DeclareMathOperator{\Comma}{Comma}
-\DeclareMathOperator{\Cocomma}{Cocomma}
-\DeclareMathOperator{\Sh}{Sh}
-\DeclareMathOperator{\Ho}{Ho}
-\DeclareMathOperator{\Sp}{Sp}
-\newcommand{\SymSp}{\mathrm{Sp}^{\Sigma}}
-\newcommand{\enHo}[1]{\mathcal{H}o(\encat{#1})}
-\newcommand{\BKleisli}[1]{\mathcal{K}\ell({#1})}
-
-% 具体的な圏
-
-\newcommand{\zerocat}{\algdmathbba{0}}
-\newcommand{\onecat}{\algdmathbbb{1}}
-\newcommand{\twocat}{\algdmathbba{2}}
-\newcommand{\threecat}{\algdmathbba{3}}
-\newcommand{\Iso}{\mathbf{Iso}}
-\newcommand{\Set}{\mathbf{Set}}
-\newcommand{\Grp}{\mathbf{Grp}}
-\newcommand{\Ab}{\mathbf{Ab}}
-\newcommand{\CMonoid}{\mathbf{CMon}}
-\newcommand{\Monoid}{\mathbf{Mon}}
-\newcommand{\Top}{\mathbf{Top}}
-\newcommand{\Topos}{\mathbf{Topos}}
-\newcommand{\CptHaus}{\mathbf{CptHaus}}
-\newcommand{\CGWH}{\mathbf{CGWH}}
-\newcommand{\CRing}{\mathbf{CRing}}
-\newcommand{\Ring}{\mathbf{Ring}}
-\newcommand{\Dom}{\mathbf{Dom}}
-\newcommand{\Field}{\mathbf{Field}}
-\newcommand{\CstarAlg}{C^*\mathchar`-\mathbf{Alg}}
-\newcommand{\Vect}[1]{\mathbf{Vect}_{#1}}
-\newcommand{\Ch}{\mathbf{Ch}}
-\newcommand{\Graph}{\mathbf{Graph}}
-\newcommand{\monoidalR}{\widebar{\R}_+}
-\newcommand{\Gray}{\mathbf{Gray}}
-\newcommand{\Icon}{\mathbf{Icon}}
-
-\newcommand{\simplex}{\mathchoice%
-    {\scalebox{1.0954}{$\displaystyle\algdmathbbb{\Delta}$}} % ディスプレイスタイル
-    {\scalebox{1.0954}{$\textstyle\algdmathbbb{\Delta}$}} % テキストスタイル
-    {\scalebox{1.0954}{$\scriptstyle\algdmathbbb{\Delta}$}} % スクリプトスタイル
-    {\scalebox{1.0954}{$\scriptscriptstyle\algdmathbbb{\Delta}$}} % スクリプトスクリプトスタイル
-}
-
-\newcommand{\asimplex}{\simplex_{\mathrm{a}}}
-\newcommand{\horn}[2]{\Lambda^{#1, #2}}
-
-\newcommand{\Cat}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Cat}}
-\newcommand{\CAT}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{CAT}}
-\newcommand{\topcat}{\Cat_{\mathrm{top}}}
-\newcommand{\simcat}{\Cat_{\Delta}}
-\newcommand{\dgCat}[1][\algd@Cat@clear]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Cat}}
-\newcommand{\MonCat}{\mathbf{MonCat}}
-\newcommand{\MonCatlax}{\mathbf{MonCat}_{\ell}}
-\newcommand{\Mod}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Mod}}
-\newcommand{\dgMod}[1]{\mathbf{dg}\mathchar`-#1\mathchar`-\mathbf{Mod}}
-\newcommand{\Prof}[1][\algd@Cat@clear]{#1\mathchar`-\mathbf{Prof}}
-\newcommand{\Model}{\mathbf{Model}}
-\newcommand{\FrBi}{\mathcal{FB}}
-\newcommand{\FrBilax}{\mathcal{FB}_{\ell}}
 
 % 関手
 
 \newcommand{\yoneda}{y}
-\newcommand{\Sing}{\mathrm{Sing}}
 \newcommand{\Diagonal}{\Delta}
-\DeclareMathOperator{\grocon}{Gr}
+\newcommand{\Codiagonal}{\nabla}
+\newcommand{\Sing}{\mathrm{Sing}}
+\newcommand{\Nerve}{\mathrm{N}}
+\newcommand{\simplicialSetHomotopy}{\tau_1}
 \newcommand{\Ldev}{\mathbf{L}}
 \newcommand{\Rdev}{\mathbf{R}}
 \newcommand{\Ltotal}{\underline{\mathbf{L}}}
 \newcommand{\Rtotal}{\underline{\mathbf{R}}}
+\DeclareMathOperator{\grothendieckConst}{Gr}
+\newcommand{\grothendieckConstComp}[3]{#2\star_{#1}#3}
+\newcommand{\grothendieckConstEmbedding}[1]{[#1]}
 
-% モノイダル圏
+% モノイダル圏豊穣圏
 
 \newcommand{\Vunit}{I}
-\newcommand{\Vcopower}{\odot}
-\newcommand{\Vpower}{\pitchfork}
-
-% その他
-
-\DeclareMathOperator*{\colim}{colim}
+\newcommand{\Vcopower}{\mathbin{\odot}}
+\newcommand{\Vpower}{\mathbin{\pitchfork}}
+\newcommand{\Vfree}{\mathfrak{F}}
 \newcommand{\wcolim}[2]{\mathrm{colim}^{#1}#2}
 \newcommand{\wlim}[2]{\mathrm{lim}^{#1}#2}
+\newcommand{\enfuncpost}[1]{[1, #1]}
+\newcommand{\enfuncpre}[1]{[#1, 1]}
+
+% 2圏
+
+\newcommand{\bicopower}{\mathbin{\odot}}
+\newcommand{\bipower}{\mathbin{\pitchfork}}
 \newcommand{\bicolim}[2]{\mathrm{colim}_{\mathrm{bi}}^{#1}#2}
 \newcommand{\bilim}[2]{\mathrm{lim}_{\mathrm{bi}}^{#1}#2}
-\newcommand{\wbicolim}[2]{\mathrm{colim}_{\mathrm{w}}^{#1}#2}
-\newcommand{\wbilim}[2]{\mathrm{lim}_{\mathrm{w}}^{#1}#2}
+\newcommand{\wtwocolim}[2]{\mathrm{colim}_{\mathrm{w}}^{#1}#2}
+\newcommand{\wtwolim}[2]{\mathrm{lim}_{\mathrm{w}}^{#1}#2}
+\newcommand{\laxbicolim}[2]{\mathrm{colim}_{\ell}^{#1}#2}
+\newcommand{\laxbilim}[2]{\mathrm{lim}_{\ell}^{#1}#2}
 \newcommand{\laxcolim}[2]{\mathrm{colim}_{\ell}^{#1}#2}
 \newcommand{\laxlim}[2]{\mathrm{lim}_{\ell}^{#1}#2}
 \newcommand{\pscolim}[2]{\mathrm{colim}_{\mathrm{ps}}^{#1}#2}
 \newcommand{\pslim}[2]{\mathrm{lim}_{\mathrm{ps}}^{#1}#2}
+\newcommand{\biadjoint}{\dashv}
+
+\newcommand{\hrightarrow}{\xslashedrightarrow{}}
+%\newcommand{\hmor}{\xslashedrightarrow{}}
+%\newcommand{\vmor}{\rightarrow}
+\newcommand{\companion}[1]{#1_{\star}}
+\newcommand{\companioneta}[1]{{}_{#1}\eta}
+\newcommand{\companionep}[1]{{}_{#1}\epsilon}
+\newcommand{\conjoint}[1]{#1^{\star}}
+\newcommand{\conjointeta}[1]{\eta_{#1}}
+\newcommand{\conjointep}[1]{\epsilon_{#1}}
+
+% モナド
+
+\newcommand{\monadInc}[1]{\mathrm{Inc}_{#1}}
+\newcommand{\monadUnderlying}[1]{U_{#1}}
+\newcommand{\monadAlgebra}[1]{\mathrm{Alg}_{#1}}
+
+% モデル圏
+
+\newcommand{\mequivalences}{\mathrm{W}}
+\newcommand{\mfibrations}{\mathrm{Fib}}
+\newcommand{\mcofibrations}{\mathrm{Cof}}
+\newcommand{\cof}[1][]{\underset{#1}{\hookrightarrow}}
+\newcommand{\fib}[1][]{\underset{#1}{\twoheadrightarrow}}
+\newcommand{\weakeq}[1][]{\overset{\sim}{\underset{#1}{\rightarrow}}}
+\newcommand{\tricof}[1][]{\overset{\sim}{\underset{#1}{\hookrightarrow}}}
+\newcommand{\trifib}[1][]{\overset{\sim}{\underset{#1}{\twoheadrightarrow}}}
+\newcommand{\mcylinder}[1]{#1\wedge I}
+\newcommand{\mpath}[1]{#1^I}
+\newcommand{\mhomotopic}{\sim}
+\newcommand{\lhomotopic}{\mathrel{\overset{l}{\sim}}}
+\newcommand{\rhomotopic}{\mathrel{\overset{r}{\sim}}}
+\newcommand{\mcatcof}[1]{#1_{\mathrm{c}}}
+\newcommand{\mcatfib}[1]{#1_{\mathrm{f}}}
+\newcommand{\mcatcoffib}[1]{#1_{\mathrm{cf}}}
+\newcommand{\mQres}[1]{p^{\star}_{#1}}
+\newcommand{\mQmor}[1]{#1^Q}
+\newcommand{\mRres}[1]{i^{\star}_{#1}}
+\newcommand{\mRmor}[1]{#1^R}
+
+\newcommand{\Lotimes}{\otimes^{\mathbf{L}}}
+\newcommand{\RVHom}[1]{\llbracket#1\rrbracket}
+\newcommand{\RVpower}{\Vpower^{\mathbf{R}}}
+\newcommand{\LVcopower}{\Vcopower^{\mathbf{L}}}
+\newcommand{\vtricof}{\mathrel{\lhook\joinrel\relbar\hspace{-0.8em}\overset{\sim}{\scalebox{0.75}{\textit{V}}}\hspace{-0.7em}\rightarrow}}
+\newcommand{\vtrifib}{\mathrel{-\hspace{-0.6em}\overset{\sim}{\scalebox{0.75}{\textit{V}}}\hspace{-0.9em}\twoheadrightarrow}}
+
+% トポス
+
+\newcommand{\toposT}{\mathrm{true}}
+\newcommand{\toposF}{\mathrm{false}}
+\newcommand{\toposand}{\mathord{\landorg}}
+\newcommand{\toposandbin}{\mathbin{\landorg}}
+\newcommand{\toposor}{\mathord{\lororg}}
+\newcommand{\toposorbin}{\mathbin{\lororg}}
+\newcommand{\toposnot}{\mathord{\lnot}}
+\newcommand{\toposimply}{\algd@rightwhitearrow}
+\newcommand{\toposforall}[1]{\forall_{#1}}
+\newcommand{\toposexists}[1]{\exists_{#1}}
+\newcommand{\toposeq}{\mathrm{eq}}
+\newcommand{\toposin}{\in}
+\newcommand{\subobjectClassifier}{\Omega}
+\newcommand{\toposP}{P}
+\newcommand{\topossingle}[1]{\{\cdot\}_{#1}}
+
+% その他
+
+\DeclareMathOperator*{\colim}{colim}
 \DeclareMathOperator*{\Sub}{Sub}
 \newcommand{\commute}{\circlearrowleft}
-\newcommand{\Cof}{\mathrm{Cof}}
 \newcommand{\Fib}{\mathrm{Fib}}
 \newcommand{\DFib}{\mathrm{DFib}}
+\newcommand{\Cof}{\mathrm{Cof}}
 \newcommand{\CodCof}{\mathrm{CodCof}}
 \newcommand{\cell}[1][\algd@Cat@clear]{#1\mathchar`-\mathrm{cell}}
-\newcommand{\pushpro}{\mathbin{\square}}
 \newcommand{\ftimes}{\mathbin{\square}}
 \newcommand{\lpsadj}[1]{\mathrel{{}_{#1}{\dashv}}}
-\newcommand{\pullback}[2]{#1\mathbin{\downarrow}^{\!=}#2}
-\newcommand{\pushout}[2]{#1\mathbin{\uparrow}_{\!=}#2}
 \DeclareMathOperator*{\Monad}{Monad}
-\newcommand{\psadjoint}{\dashv}
-\newcommand{\descent}[1]{\mathrm{Desc}(#1)}
-\newcommand{\enfuncpost}[1]{[1, #1]}
-\newcommand{\enfuncpre}[1]{[#1, 1]}
+\DeclareMathOperator*{\Desc}{Desc}
 
 \newcommand{\nlab}{\emph{n}Lab}
 
@@ -509,13 +771,17 @@
 \tikzset{dbldsh/.style={ double, densely dotted, double equal sign distance, -Implies }}
 \tikzset{rhook/.style={ {Hooks[right]}-> }}
 \tikzset{cross/.style={ preaction={-,draw=white,line width=6pt} }}
-\tikzset{varrow/.style={ auto=false, node contents={\scalebox{0.75}{\textit{V}}}, sloped }}
+\tikzset{varrow/.style={ auto=false, node contents={\scalebox{0.7}{\textit{V}}}, sloped }}
+\tikzset{parrow/.style={ auto=false, draw, shape=circle, inner sep=1.3pt }}
 
 %double category
 \tikzset{barred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
+\tikzset{dbarred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (1pt,-2pt) -- (1pt,2pt) (-1pt,-2pt) -- (-1pt,2pt);}},postaction={decorate}}}
 \tikzset{hequal/.style={transform canvas={yshift=1pt},preaction={draw,transform canvas={yshift=-1pt}}}}
 \tikzset{vequal/.style={transform canvas={xshift=1pt},preaction={draw,transform canvas={xshift=-1pt}}}}
+\tikzset{nullarray/.style={densely dashed}}
 \tikzset{cell/.style={inner sep=0pt,label={[inner sep=0pt]right:$\scriptstyle #1$}}}
+\tikzset{leftcell/.style={inner sep=0pt,label={[inner sep=0pt]left:$\scriptstyle #1$}}}
 \tikzset{abovecell/.style={inner sep=2pt,label={[inner sep=0pt]above:$\scriptstyle #1$}}}
 \tikzset{belowcell/.style={inner sep=2pt,label={[inner sep=0pt]below:$\scriptstyle #1$}}}
 
