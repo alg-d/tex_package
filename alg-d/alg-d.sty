@@ -3,7 +3,7 @@
 %% http://alg-d.com/
 %%
 
-\ProvidesPackage{alg-d}[2026/01/14]
+\ProvidesPackage{alg-d}[2026/03/29]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
@@ -33,6 +33,7 @@
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{decorations.markings} %barred用
+\usetikzlibrary{decorations.pathreplacing} %brace用
 \usetikzlibrary{fit}
 \usetikzlibrary{calc}
 
@@ -55,11 +56,6 @@
 \DeclareSymbolFont{rsfs}{U}{rsfs}{m}{n}
 \DeclareSymbolFontAlphabet{\algdrsfs}{rsfs}
 
-% enumitem
-\usepackage{enumitem}
-\setlist[enumerate]{label=(\arabic*)}
-\setlist[itemize,2]{label=\textborn}
-
 % \toposimply用
 \DeclareFontEncoding{LS1}{}{}
 \DeclareFontSubstitution{LS1}{stix}{m}{n}
@@ -71,6 +67,9 @@
 \zcDeclareLanguage[allcaps]{japanese}
 \zcLanguageSetup{japanese}{
   namesep   = {\nobreak} ,
+  pairsep = {, } ,
+  listsep = {, } ,
+  lastsep = {, } ,
   rangesep  = {～} ,
   type = page ,
     Name-sg =,
@@ -107,7 +106,13 @@
   type = thm ,
     Name-sg = 定理 ,
     Name-pl = 定理 ,
+  type = theoremnote ,
+    Name-sg = 定理 ,
+    Name-pl = 定理 ,
   type = prop ,
+    Name-sg = 命題 ,
+    Name-pl = 命題 ,
+  type = propnote ,
     Name-sg = 命題 ,
     Name-pl = 命題 ,
   type = lem ,
@@ -122,11 +127,20 @@
 }
 \zcsetup{lang=japanese}
 \zcsetup{nameinlink=true}
+\AddToHook{env/equation/begin}{%
+  \zcsetup{ reftype=equation }
+}
 \AddToHook{env/thm/begin}{%
   \zcsetup{ countertype = { equation = thm }}
 }
+\AddToHook{env/theoremnote/begin}{%
+  \zcsetup{ countertype = { equation = theoremnote }}
+}
 \AddToHook{env/prop/begin}{%
   \zcsetup{ countertype = { equation = prop }}
+}
+\AddToHook{env/propnote/begin}{%
+  \zcsetup{ countertype = { equation = propnote }}
 }
 \AddToHook{env/lem/begin}{%
   \zcsetup{ countertype = { equation = lem }}
@@ -149,9 +163,19 @@
   {\upshape}% body font (upshape is normal/roman font)
   {}% indent amount
   {}% head font (bold)
+  {\textbf{.}}% head punctuation
+  {5pt plus 1pt minus 1pt}% head space
+  {\thmname{\textgt{#1}}\thmnumber{ \textbf{#2}}}% head spec (empty for default)
+
+\newtheoremstyle{titlegothicwithnote}% name of the style
+  {}% space above
+  {}% space below
+  {\upshape}% body font (upshape is normal/roman font)
+  {}% indent amount
+  {}% head font (bold)
   {．}% head punctuation
   {0pt}% head space
-  {\thmname{\textgt{#1}}\thmnumber{ \textbf{#2}}\thmnote{（#3）}}% head spec (empty for default)
+  {\thmname{\textgt{#1}}\thmnumber{ \textbf{#2}}（#3）}% head spec (empty for default)
 
 %%%%%%%%%% \widebar %%%%%%%%%%
 
@@ -270,6 +294,17 @@
 		\index{#2@#1}{\bfseries\gtfamily\sffamily #3}%
 	\fi
 }
+
+%%%%%%%%%% \reasonEqual %%%%%%%%%%
+
+\newcommand{\reasonEqual}[1]{\begin{tikzpicture}[baseline=(a.base)]
+\node[label={above:#1}] (a) at (0, 0) {$=$};
+\end{tikzpicture}}
+
+\newcommand{\reasonIff}[1]{\begin{tikzpicture}[baseline=(a.base)]
+\node[label={above:#1}] (a) at (0, 0) {$\Longleftrightarrow$};
+\end{tikzpicture}}
+
 
 %%%%%%%%%% 記号 %%%%%%%%%%
 
@@ -601,6 +636,8 @@
 \newcommand{\Model}{\mathbf{Model}}
 \newcommand{\FrBi}{\mathcal{FB}}
 \newcommand{\FrBilax}{\mathcal{FB}_{\ell}}
+\newcommand{\dRel}{\mathbb{R}\mathrm{el}}
+\newcommand{\dMod}{\mathbb{M}\mathrm{od}}
 \newcommand{\dProf}[1][\algd@Cat@clear]{#1\mathchar`-\mathbb{P}\mathrm{rof}}
 \newcommand{\dPROF}[1][\algd@Cat@clear]{#1\mathchar`-\mathbb{P}\mathrm{ROF}}
 \newcommand{\AVDCat}{\mathbf{AVDCat}}
@@ -681,6 +718,9 @@
 \newcommand{\pscolim}[2]{\mathrm{colim}_{\mathrm{ps}}^{#1}#2}
 \newcommand{\pslim}[2]{\mathrm{lim}_{\mathrm{ps}}^{#1}#2}
 \newcommand{\biadjoint}{\dashv}
+
+\newcommand{\yonestLan}[1]{\mathrm{lan}_{#1}}
+\newcommand{\yonestRan}[1]{\mathrm{ran}_{#1}}
 
 \newcommand{\hrightarrow}{\xslashedrightarrow{}}
 %\newcommand{\hmor}{\xslashedrightarrow{}}
@@ -776,7 +816,9 @@
 
 %double category
 \tikzset{barred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
-\tikzset{dbarred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (1pt,-2pt) -- (1pt,2pt) (-1pt,-2pt) -- (-1pt,2pt);}},postaction={decorate}}}
+\tikzset{pbarred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (1pt,-2pt) -- (1pt,2pt) (-1pt,-2pt) -- (-1pt,2pt);}},postaction={decorate}}}
+\tikzset{nbarred/.style={->, decoration={markings, mark=at position 0.5 with {\draw[-] (1pt,-2pt) -- (1pt,2pt) (-1pt,-2pt) -- (-1pt,2pt);}},postaction={decorate}}}
+%\tikzset{nbarred/.style={->, densely dashed, decoration={markings, mark=at position 0.5 with {\draw[-] (0,-2pt) -- (0,2pt);}},postaction={decorate}}}
 \tikzset{hequal/.style={transform canvas={yshift=1pt},preaction={draw,transform canvas={yshift=-1pt}}}}
 \tikzset{vequal/.style={transform canvas={xshift=1pt},preaction={draw,transform canvas={xshift=-1pt}}}}
 \tikzset{nullarray/.style={densely dashed}}
