@@ -2,13 +2,12 @@
 %% パッケージファイル kanpdf
 %%
 
-\ProvidesPackage{kanpdf}[2026/01/14]
+\ProvidesPackage{kanpdf}[2026/03/29]
 
 %%%%%%%%%% パッケージ %%%%%%%%%%
 
 \usepackage{alg-d}
 %\usepackage{paralist}
-\usepackage{color}
 
 % hyperref
 %setpagesize=false (trueだと組版に悪影響が出ることがある)
@@ -18,17 +17,36 @@
 \usepackage[setpagesize=false,bookmarksnumbered,pdfusetitle]{hyperref}
 \usepackage{pxjahyper} %しおりの文字化け防止
 
+%%%%%%%%%%% 目次用 %%%%%%%%%%%%%%%%%%%%
+
+\def\@dottedtocline#1#2#3#4#5{\ifnum #1>\c@tocdepth \else
+  \vskip \z@ \@plus.2\jsc@mpt
+  {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    \parindent #2\relax\@afterindenttrue
+   \interlinepenalty\@M
+   \leavevmode
+   \@lnumwidth #3\relax
+   \advance\leftskip \@lnumwidth \null\nobreak\hskip -\leftskip
+%    {#4}\nobreak
+    {\headfont #4}\nobreak
+    \jsTocLine \nobreak\hb@xt@\@pnumwidth{%
+         \hfil\normalfont \normalcolor #5}\par}\fi}
+
 %%%%%%%%%%% 何か %%%%%%%%%%%%%%%%%%%%
 
 \author{\texorpdfstring{alg-d\\ \url{https://alg-d.com/math/kan_extension/}}{alg-d}}
 
 \pagestyle{plain} % ヘッダー無し、フッターにページ番号
 %\theoremstyle{definition}
-\theoremstyle{titlegothic}
 
 %\def\labelenumi{$(\theenumi )$}
 %\def\theenumi{\arabic{enumi}}
 
+\theoremstyle{titlegothicwithnote}
+\newtheorem{theoremnote}[equation]{定理}
+\newtheorem{propnote}[equation]{命題}
+
+\theoremstyle{titlegothic}
 \newtheorem*{defi}{定義}
 \newtheorem{thm}[equation]{定理}
 \newtheorem{prop}[equation]{命題}
@@ -42,11 +60,15 @@
   \pushQED{\qed}%
   \normalfont \topsep6\p@\@plus6\p@\relax
   \trivlist
-  \item[\hskip\labelsep
-    #1\@addpunct{\textbf{.}}]\ignorespaces
+  \item[\hskip\labelsep #1\@addpunct{\textbf{.}}]\ignorespaces
 }{%
   \popQED\endtrivlist\@endpefalse
 }
+
+% enumitem (beamerと相性が悪いためこっちに)
+\usepackage{enumitem}
+\setlist[enumerate]{label=(\arabic*)}
+\setlist[itemize,2]{label=\textborn}
 
 
 %%%%%%%%%% 圏論本用 %%%%%%%%%%
@@ -59,8 +81,4 @@
 
 \newif\iftwocategory
 \twocategorytrue
-
-\newcommand{\pdftext}[1]{#1}
-\newcommand{\enrichtext}[1]{}
-\newcommand{\kanbooktext}[1]{}
 
